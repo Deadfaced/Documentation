@@ -8,7 +8,8 @@
 - [FACTORIES](#FACTORIES)
 - [MODELS](#MODELS)
 - [CONTROLLERS](#CONTROLLERS)
-- [N:N](#N%3AN)
+- [N-N](#N-N)
+  
 ---
 
 
@@ -308,7 +309,7 @@ public function index()
 
 
 
-# N:N
+# N-N
 
 In order to create a N:N relationship (users-roles for example) we need to do a few things:
 - create a `belongsToMany` relationship in both tables:
