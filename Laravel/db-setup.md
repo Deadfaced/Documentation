@@ -309,6 +309,7 @@ public function index()
 
 
 # N:N
+
 In order to create a N:N relationship (users-roles for example) we need to do a few things:
 - create a `belongsToMany` relationship in both tables:
 
