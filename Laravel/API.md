@@ -123,12 +123,12 @@ First we need to create a new collection. We can then add a 'User' folder inside
 
 Now we can add the requests according to the methods we added inside the controller.
 
-![](/assets/Postman/requests.png)
+![](assets/Postman/requests.png)
 
 ## Requests
 Add new request:
 
-![](/assets/Postman/addRequest.png)
+![](assets/Postman/addRequest.png)
 
 The name given to the request is based on the method and the url. For example, the request for the index method will be named `users` because the url is `http://localhost:8000/api/users`.
 
@@ -141,7 +141,7 @@ After creating a new request we should add the url and the method.
 - url: `http://localhost:8000/api/users`
 - method: `GET`
 
-![](/assets/Postman/getUsers.png)
+![](assets/Postman/getUsers.png)
 
 When pressing the `Send` button we should get a response with all the users.
 
@@ -151,7 +151,7 @@ When pressing the `Send` button we should get a response with all the users.
 - url: `http://localhost:8000/api/users/1`
 - method: `GET`
 
-![](/assets/Postman/getOneUser.png)
+![](assets/Postman/getOneUser.png)
 
 
 ### ADD new user
@@ -163,7 +163,7 @@ To add new user we first need to change the method to `POST` and the url to `htt
 
 Then we need to go to the `Body` tab and select `raw` and `JSON` from the dropdown menu.
 
-![](/assets/Postman/postChanges.png)
+![](assets/Postman/postChanges.png)
 
 After that we can add the user data in JSON format:
 ```json
@@ -176,7 +176,7 @@ After that we can add the user data in JSON format:
 ```
 We then hit `Send` and we should get a response with the new user.
 
-![](/assets/Postman/postUser.png)
+![](assets/Postman/postUser.png)
 
 ### EDIT user
 To edit a user we need to do the same thing as we did in the `POST` where we changed to the `Body` tab and selected `raw` and `JSON` from the dropdown menu.
