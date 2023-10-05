@@ -10,9 +10,9 @@ First of all we need to create a folder called `master` (for example) inside `re
 - `footer.blade.php`
 
 Examples of these files:
-- [header](/Views/MasterPage/header.md)
-- [main](/Views/MasterPage/main.md)
-- [footer](/Views/MasterPage/footer.md)
+- [header](Views/MasterPage/header.md)
+- [main](Views/MasterPage/main.md)
+- [footer](Views/MasterPage/footer.md)
 
 ---
 
