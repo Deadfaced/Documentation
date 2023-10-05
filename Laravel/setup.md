@@ -101,3 +101,7 @@ _**RESTART SERVER**_
   - CMD: ```composer install``` and ```npm install```
 
 ---
+
+[TOP](#setup)
+
+[BACK](README.md)

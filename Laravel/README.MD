@@ -6,5 +6,6 @@ Documentation for Laravel projects
 
 - [Setup](setup.md)
 - [DB Setup](db-setup.md)
+- [Views](views.md)
 - [CRUD](CRUD.md)
 - [API](API.md)

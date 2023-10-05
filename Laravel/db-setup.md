@@ -8,6 +8,7 @@
 - [FACTORIES](#FACTORIES)
 - [MODELS](#MODELS)
 - [CONTROLLERS](#CONTROLLERS)
+- [N:N](#N:N)
 ---
 
 
@@ -115,6 +116,8 @@ Route::get('/user/{id}', "UserController@show");
 ---
 # MIGRATIONS
 
+Example:
+
 File: `./database/migrations/2020_12_09_000000_create_users_table.php`
 ```php
 public function up()
@@ -130,13 +133,20 @@ public function up()
         });
     }
 ```
+A few things to note:
+- `public function up()` is the function that will be executed when the migration is run
+- `Schema::create('users', function (Blueprint $table)` creates a table named `users`
+- the keyword `constrained()` is used to create a foreign key; if left empty it will create a foreign key named `country_id` that references the `id` column of the `countries` table
+- the keyword `constrained()` can also be filled to point to the table and column that we want to reference; in this case it could be something like `constrained('countries', 'code')` which would create a foreign key named `country_id` that references the `code` column of the `countries` table
+- `softDeletes()` creates a column named `deleted_at` which will be used to soft delete rows from the table
 
 ---
 # SEEDERS
 
-**IMPORTANTE**
-em `./database/seeds/DatabaseSeeder.php` é necessário chamar cada seeder que se quer correr
-```php	
+**IMPORTANT**
+in the file `./database/seeds/DatabaseSeeder.php` it is necessary to call each seeder that we want to run
+
+```php
 public function run()
     {
         $this->call(CountrySeeder::class);
@@ -146,9 +156,9 @@ public function run()
 ```
 
 
-_inserir dados nas tabelas manualmente_
+_insert data manually_
 
-ex: `./database/seeds/CountrySeeder.php`
+File: `./database/seeds/CountrySeeder.php`
 ```php
 public function run()
     {
@@ -156,13 +166,13 @@ public function run()
             'name' => 'Portugal',
         ]);
         \DB::table('countries')->insert([
-            'name' => 'Espanha',
+            'name' => 'Spain',
         ]);
         \DB::table('countries')->insert([
-            'name' => 'França',
+            'name' => 'France',
         ]);
         \DB::table('countries')->insert([
-            'name' => 'Polónia',
+            'name' => 'Japan',
         ]);
     }
 ```
@@ -171,7 +181,7 @@ public function run()
 
 ---
 # FACTORIES
-inserir um certo número de dados nas tabelas automaticamente
+_insert fictional data into each field_
 
 Ex:
 `./database/factories/UserFactory.php`
@@ -184,15 +194,18 @@ $factory->define(User::class, function (Faker $faker) {
     ];
 });
 ```
-_se quiser inserir por exemplo 100 users acrescentar também_
+
+_if we want to create for example 100 fictional users also add the following code in `./database/seeds/UserSeeder.php`:_
 
 ```php
 factory(\App\User::class, 100)->create();
 ```
-em `./database/seeds/UserSeeder.php`
 
 
-### Caso queira criar _x_ número de bicicletas e associar 2 a cada user 
+
+### After creating users if we want to creat _x_ number of bicycles and associate 2 to each user
+
+File: `./database/seeds/BicycleSeeder.php`
 ```php
 public function run()
     {
@@ -204,15 +217,12 @@ public function run()
     }
 ```	
 
-_por cada iteração de `$i` cria 2 bicicletas e associa ao mesmo user_id_
+_for each `$i` iteration creates 2 bicycles and associates to the same user_id_
 
-**ATENÇÃO**
-
-_é necessário já haver (neste caso) bicycles criadas, quer através de seeder quer através de factory, para que se possa associar as bicicletas aos users_
 
 ---
 # MODELS
-fazer relações entre tabelas
+_create relationships between tables, add fillable property to fields, etc._
 
 Ex:
 ```shell
@@ -232,22 +242,18 @@ Keywords:
 
 _(class) Country hasMany (function) users_
 
+**WARNING**
+To create a N:N relationship follow [this link](#N:N)
+
 ---
 # CONTROLLERS
-Processa os requests da view (enviados através das routes) e interage com o model se necessário. Retorna uma response para a view.
+Processes the requests from the view (sent through the routes) and interacts with the model if necessary. Returns a response (for example to the view or to a JSON).
 
-Ex: `./app/Http/Controllers/UserController.php`
-```php
-public function index()
-    {
-        $users = \App\User::all();
-        return view('user', [
-            'users' => $users,
-        ]);
-    }
-```
 
-Outra maneira de representar é retornando a reponse em vez de retornar diretamente a view
+- _Example 1 (returning a view):_
+
+File: `./app/Http/Controllers/UserController.php`
+
 ```php
 public function index()
     {
@@ -258,6 +264,115 @@ public function index()
     }
 ```
 
+_Another way to represent is to return the view directly instead of returning the response_
+```php
+public function index()
+    {
+        $users = \App\User::all();
+        return view('user', [
+            'users' => $users,
+        ]);
+    }
+```
+
+
+- _Example 2 (returning a JSON):_
+
+File: `./app/Http/Controllers/UserController.php`
+
+```php
+public function index()
+    {
+        return response()->json(User::all(), 200);
+    }
+```
+
+_can also be used inside a try-catch_
+```php
+public function index()
+    {
+        try{
+            return response()->json(User::all(), 200);
+        }
+        catch(\Exception $e){
+            return response()->json(['error' => $e], 500);
+        }
+    }
+```
+
+
 
 
 ---
+
+
+
+
+# N:N
+In order to create a N:N relationship (users-roles for example) we need to do a few things:
+- create a `belongsToMany` relationship in both tables:
+
+File: `./app/User.php`
+```php
+public function roles()
+    {
+        return $this->belongsToMany(\App\Role::class);
+    }
+```
+
+File: `./app/Role.php`
+```php
+public function users()
+    {
+        return $this->belongsToMany(\App\User::class);
+    }
+```
+
+- create a pivot table (which will be used to store the relationships between the two tables) and its migration:
+`php artisan make:migration create_role_user_table --create="role_user"`
+
+**WARNING**: the name of the pivot table should be the two table names (singular) in alphabetical order separated by an underscore
+
+- change the migration for the pivot table so that it will be composed of the two foreign keys (one for each table) and any other fields that we want to add (the pivot table itself doesn't need to have an id column):
+```php
+public function up()
+    {
+        Schema::create('role_user', function (Blueprint $table) {
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('role_id')->constrained();
+        });
+    }
+```
+
+
+
+- use methods such as `attach()`, `detach()`, `sync()` and `syncWithoutDetaching()` to add or remove relationships between the two tables:
+  - `attach()` adds a relationship between the two tables
+  - `detach()` removes a relationship between the two tables
+  - `sync()` removes all relationships between the two tables and adds the ones that we specify
+  - `syncWithoutDetaching()` adds the relationships that we specify without removing the ones that already exist
+
+_Example of a `UserController@store`:_
+```php
+public function store(Request $request)
+    {
+        $user = new User();
+        $user->first_name = $request->input('first_name');
+        $user->last_name = $request->input('last_name');
+        $user->save();
+        $user->roles()->sync($request->input('roles', []));
+
+        return response()->json($user, 201);
+    }
+```
+
+- In this example we are first creating an instance of the `User` model, asking for the fields `first_name` and `last_name` and saving it to the database (using the method `save()`).
+- Then we are using the `sync()` method to add the relationships between the user and the roles that we specify in the request.
+- The `sync()` method takes an array as an argument so we are using the `input()` method to get the roles from the request.
+- The second argument of the `input()` method is the default value that will be used if the roles are not specified in the request.
+- In this case we are using an empty array as the default value because if the roles are not specified in the request we don't want to add any roles to the user.
+
+---
+[TOP](#INDEX)
+
+[BACK](README.md)
