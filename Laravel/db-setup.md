@@ -8,7 +8,7 @@
 - [FACTORIES](#FACTORIES)
 - [MODELS](#MODELS)
 - [CONTROLLERS](#CONTROLLERS)
-- [N:N](#N:N)
+- [N:N](#N%3AN)
 ---
 
 
