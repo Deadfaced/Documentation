@@ -18,7 +18,7 @@ composer create-project --prefer-dist laravel/laravel:^7.0 "projectName"
 _**IMPORTANT**_
 _enter the newly created project_
 ```shell
-cd "projectName"
+code "projectName"
 ```
 
 
