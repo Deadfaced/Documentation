@@ -31,7 +31,7 @@ or we can reuse them
 
 _create all_
 ```shell
-php artisan make:model "nameModel" -a
+php artisan make:model "NameModel" -a
 ```
 
 >nameModel should be a singular noun written in title case
@@ -42,7 +42,7 @@ php artisan make:model "nameModel" -a
 
 _create controller_
 ```shell
-php artisan make:controller "nameController"
+php artisan make:controller "NameController"
 ```
 
 >nameController should be a singular noun written in title case and include the word "Controller"
@@ -50,7 +50,7 @@ php artisan make:controller "nameController"
 
 _create model_
 ```shell
-php artisan make:model "nameModel"
+php artisan make:model "NameModel"
 ```
 
 >nameModel should be a singular noun written in title case and include the word "Model"
@@ -69,7 +69,7 @@ php artisan make:migration "nameMigration" --create="nameTable"
 
 _create seeder_ (insert data into tables)
 ```shell
-php artisan make:seeder "nameSeeder"
+php artisan make:seeder "NameSeeder"
 ```
 
 >nameSeeder should be a singular noun written in title case and include the word "Seeder"
@@ -77,7 +77,7 @@ php artisan make:seeder "nameSeeder"
 
 _create factory_ (create mass data)
 ```shell
-php artisan make:factory "nameFactory"
+php artisan make:factory "NameFactory"
 ```
 
 >nameFactory should be a singular noun written in title case and include the word "Factory"
