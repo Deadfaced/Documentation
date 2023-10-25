@@ -9,6 +9,7 @@
 - [MODELS](#MODELS)
 - [CONTROLLERS](#CONTROLLERS)
 - [N-N](#N-N)
+- [SOFTDELETES](#SOFTDELETES)
 
 ---
 
@@ -354,14 +355,6 @@ public function up()
   - `sync()` removes all relationships between the two tables and adds the ones that we specify
   - `syncWithoutDetaching()` adds the relationships that we specify without removing the ones that already exist
 
-_Example of a `UserController@index`:_
-```php
-public function index(){
-    $user = User::all()->load("roles");
-    return response()->json($user);
-}
-```
-
 _Example of a `UserController@store`:_
 ```php
 public function store(Request $request)
@@ -385,6 +378,96 @@ public function store(Request $request)
 - The `sync()` method takes an array as an argument so we are using the `input()` method to get the roles from the request.
 - The second argument of the `input()` method is the default value that will be used if the roles are not specified in the request.
 - In this case we are using an empty array as the default value because if the roles are not specified in the request we don't want to add any roles to the user.
+
+
+_Example of a controller with all the CRUD methods:_
+```php
+public function index(){
+    try{
+        $user = User::all()->load("roles");
+        return response()->json($user);
+    }catch(Exception $e){
+        return response()->json([
+            "message" => "Error: " . $e,
+        ], 500);
+    }
+    
+}
+
+
+
+public function store(Request $request)
+{
+    $this->validate($request,[
+        'first_name' => 'required',
+        'last_name' => 'required',
+    ])
+    $user = new User();
+    $user->first_name = $request->input('first_name');
+    $user->last_name = $request->input('last_name');
+    $user->save();
+    $user->roles()->sync($request->input('roles', []));
+    return response()->json($user, 201);
+}
+
+
+public function show(User $user)
+{
+    try {
+        $user = $user->load("roles");
+        return response()->json($user);
+    } catch (Exception $e) {
+        return response()->json([
+            "message" => "Error: " . $e,
+        ], 500);
+    }
+}
+
+
+
+public function update(Request $request, Game $game)
+{
+    try {
+        $this->validate($request,[
+        'first_name' => 'required',
+        'last_name' => 'required',
+        ])
+        $user = new User();
+
+        $user->first_name = $request->input('first_name');
+        $user->last_name = $request->input('last_name');
+        $user->save();
+        $user->roles()->sync($request->input('roles', []));
+        return response()->json($user, 201);
+    } catch (Exception $e) {
+        return response()->json([
+            "message" => "Error: " . $e,
+        ], 500);
+    }
+}
+    
+
+public function destroy(User $user)
+{
+    try {
+        $user->roles()->sync([]);
+        $user->delete();
+        return response()->json([
+            "message" => "Deleted successfully",
+        ]);
+    } catch (Exception $e) {
+        return response()->json([
+            "message" => "Error: " . $e,
+        ], 500);
+    }
+}
+```
+
+---
+
+# SOFTDELETES
+
+
 
 ---
 [TOP](#INDEX)
