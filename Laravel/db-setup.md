@@ -354,10 +354,22 @@ public function up()
   - `sync()` removes all relationships between the two tables and adds the ones that we specify
   - `syncWithoutDetaching()` adds the relationships that we specify without removing the ones that already exist
 
+_Example of a `UserController@index`:_
+```php
+public function index(){
+    $user = User::all()->load("roles");
+    return response()->json($user);
+}
+```
+
 _Example of a `UserController@store`:_
 ```php
 public function store(Request $request)
     {
+        $this->validate($request,[
+            'first_name' => 'required',
+            'last_name' => 'required',
+        ])
         $user = new User();
         $user->first_name = $request->input('first_name');
         $user->last_name = $request->input('last_name');
