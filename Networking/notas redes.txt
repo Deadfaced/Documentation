@@ -26,6 +26,16 @@ GRUPO 1
 GRUPO 2
 
 1
+configure terminal
+ip dhcp pool VLAN10
+network 192.168.10.0 255.255.255.0
+default-router 192.168.10.254
+dns-server 8.8.8.8
+
+ip dhcp pool VLAN20
+network 192.168.20.0 255.255.255.0
+default-router 192.168.20.254
+dns-server 8.8.8.8
 
 2
 -Router(config)# enable secret cisco
