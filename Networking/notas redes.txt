@@ -1,0 +1,104 @@
+GRUPO 1
+
+1
+-Router(config)# enable secret cisco
+-Router(config)# username Admin secret !Admin2023
+-Router(config)# line console 0
+ Router(config-line)# login local
+-Router(config)# banner motd #
+ Authorized Access Only!
+ #
+-Router(config)# hostname R3
+-Router(config)# service password-encryption
+
+2
+-Router(config)# enable secret cisco
+-Router(config)# username Admin secret !Admin2023
+-Router(config)# line console 0
+ Router(config-line)# login local
+-Router(config)# banner motd #
+ Authorized Access Only!
+ #
+-Router(config)# hostname SW-INF1
+-Router(config)# service password-encryption
+
+
+GRUPO 2
+
+1
+
+2
+-Router(config)# enable secret cisco
+-Router(config)# username Admin secret !Admin2023
+-Router(config)# line console 0
+ Router(config-line)# login local
+-Router(config)# banner motd #
+ Authorized Access Only!
+ #
+-Router(config)# hostname SW-ADM1 | SW-ADM2 | SW-ADM3
+-Router(config)# service password-encryption
+
+3
+
+4
+-Switch# vlan database
+-Switch(vlan)# vlan 10
+-Switch(vlan)# exit
+-Switch# conf t
+-Switch(config)# interface vlan2
+-Switch(config-if)# ip address <ip> <mask>
+-Switch(config-if)# no shut 
+
+5
+
+
+GRUPO 3
+
+1
+-Router(config)# enable secret cisco
+-Router(config)# username Admin secret !Admin2023
+-Router(config)# line console 0
+ Router(config-line)# login local
+-Router(config)# banner motd #
+ Authorized Access Only!
+ #
+-Router(config)# hostname R1 | R2
+-Router(config)# service password-encryption
+
+2
+-Router(config)# enable secret cisco
+-Router(config)# username Admin secret !Admin2023
+-Router(config)# line console 0
+ Router(config-line)# login local
+-Router(config)# banner motd #
+ Authorized Access Only!
+ #
+-Router(config)# hostname SW-LA1 | SW-LA2
+-Router(config)# service password-encryption
+
+4
+
+5
+interface GigabitEthernet0/0
+ip address 192.168.1.1 255.255.255.0
+standby 1 ip 192.168.1.254
+standby 1 priority 110
+standby 1 preempt
+
+6
+R1
+Router1(config)# router rip
+Router1(config-router)# version 2
+Router1(config-router)# network 192.168.1.0
+Router1(config-router)# network 192.168.2.0
+
+R2
+Router2(config)# router rip
+Router2(config-router)# network 10.0.0.0
+Router2(config-router)# network 209.165.201.0
+
+R3
+Router3(config)# router rip
+Router3(config-router)# network 192.168.0.0
+Router3(config-router)# network 172.16.0.0
+Router3(config-router)# network 209.165.201.4

@@ -20,6 +20,7 @@
 - `(config)banner motd #banner message#`: make "banner message" be the message of the day
 - `(config)enable password "passw"`: not encrypted password
 - `(config)enable secret "passw"`: encrypted password
+- `(config)service password-encryption`: encrypt all passwords
 - `(config)line console 0`: router/switch initial config 
 - `(config-line)password "passw"`: add entry password
 - `(config-line)login`: enables login
