@@ -1,3 +1,16 @@
+- [COMMANDS PACKET TRACER](#commands-packet-tracer)
+  - [Basic configs](#basic-configs)
+  - [Router basic config](#router-basic-config)
+  - [Switch basic config](#switch-basic-config)
+  - [PC basic config](#pc-basic-config)
+  - [Telnet remote access](#telnet-remote-access)
+  - [Show configs](#show-configs)
+  - [SSH remote access](#ssh-remote-access)
+  - [DHCP](#dhcp)
+  - [RIP protocol - dynamic routes](#rip-protocol---dynamic-routes)
+
+
+
 # COMMANDS PACKET TRACER
 
 ## Basic configs
@@ -15,6 +28,7 @@
 - `(config)interface fastEthernet "0/0"`: enter interface "0/0"
 - `(config-if)description "rede local de coimbra"`: add description
 - `(config-if)ip address <ip> <mask>`: add IP address and mask
+
 
 
 
