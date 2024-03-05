@@ -58,3 +58,57 @@ import { ProductAlertsComponent } from './product-alerts/product-alerts.componen
 
 
 ## Passing data to a parent component
+- import `Output` and `EventEmitter` from `@angular/core`;
+- define a property with an `@Output` decorator and an instance of `EventEmitter()`;
+- bind an event to call the emit:
+```html
+<button type="button" (click)="notify.emit()">Notify Me</button>
+```
+
+
+
+## NAVIGATION
+- in `AppModule` add a route with a path
+```ts
+RouterModule.forRoot([
+    { path: 'products/:roductId', component: ProductDetailsComponent },
+])
+```
+- in parent component include `routerLink`:
+```ts
+<a [routerLink]="['/products', product.id]">
+    {{ product.name }}
+</a>
+```
+- in child component import `ActivatedRoute` from `@angular/router` and `OnInit` from `@angular/core`
+```ts
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+```
+- define the property implementing `OnInit` interface (this requires the `ngOnInit` method)
+```ts
+export class ProductDetailsComponent implements OnInit {
+    product: Product | undefined;
+}
+```
+- inject `ActivatedRoute` into the constructor
+```ts
+export class ProductDetailsComponent implements OnInit {
+
+    product: Product | undefined;
+
+    constructor(private route: ActivatedRoute) { }
+
+}
+```
+- in the child component add the `ngOnInit` method and extract the id from the route parameters and find said id in the array
+```ts
+ngOnInit() {
+    // First get the product id from the current route.
+    const routeParams = this.route.snapshot.paramMap; //'route.snapshot' accesses the route parameters
+    const productIdFromRoute = Number(routeParams.get('productId'));
+
+    // Find the product that correspond with the id provided in route.
+    this.product = products.find(product => product.id === productIdFromRoute);
+}
+```
