@@ -112,3 +112,7 @@ ngOnInit() {
     this.product = products.find(product => product.id === productIdFromRoute);
 }
 ```
+
+
+
+### Managing data
