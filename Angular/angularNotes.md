@@ -1,8 +1,33 @@
-# ANGULAR
+<h1> ANGULAR </h1>
 
-## NG Directives
-- `*ngIf`;
-- `*ngFor`;
+## Setup
+- node latest version
+    - install: https://nodejs.org/en
+    - update: unistall node first, then install from the website 
+- angular cli:
+    - install: `npm install -g @angular/cli`
+    - update: 
+        - `npm uninstall -g angular-cli @angular/cli`              
+        - `npm cache verify`
+        - `npm install -g @angular/cli`
+
+
+
+## Create Project
+- `ng new "projectName" --no-strict --standalone false --routing false`
+
+description:<br>
+    - `no-strict`: disable strict mode<br>
+    - `standalone false`: <br>
+    - `routing false`: <br>
+- `code "projectName"`;
+- `ng serve`
+
+### NG Directives 
+- `*ngIf` (replaced by `@if` in newer versions);
+- `*ngFor` (replaced by `@for` in newer versions);
+- `ngStyle` - `[ngStyle]="{style: condition}"` example: `[ngStyle]="{backgroundColor: getColor()}"`;
+- `ngClass` - `[ngClass]="{'className': %condition%}"` example: `[ngClass]="{online: serverStatus === 'online'}"`;
 
 ### **TS example file**
 ```ts
@@ -116,3 +141,9 @@ ngOnInit() {
 
 
 ### Managing data
+
+
+
+### Adding Bootstrap
+- `npm install --save bootstrap@5` (@5 refers to version 5 of Bootstrap)
+- in file `angular.json` add the bootstrap file in "styles" section: `"node_modules/bootstrap/dist/css/bootstrap.min.css"`
