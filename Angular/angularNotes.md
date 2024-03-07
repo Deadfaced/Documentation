@@ -20,12 +20,14 @@ description:<br>
     - `no-strict`: disable strict mode<br>
     - `standalone false`: <br>
     - `routing false`: <br>
-- `code "projectName"`;
+- `cd "projectName"`;
+- `code .`
 - `ng serve`
 
 ### NG Directives 
 - `*ngIf` (replaced by `@if` in newer versions);
 - `*ngFor` (replaced by `@for` in newer versions);
+    - get the index when using ngFor: `*ngFor="let item of items; let i = index"`
 - `ngStyle` - `[ngStyle]="{style: condition}"` example: `[ngStyle]="{backgroundColor: getColor()}"`;
 - `ngClass` - `[ngClass]="{'className': %condition%}"` example: `[ngClass]="{online: serverStatus === 'online'}"`;
 
