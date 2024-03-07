@@ -11,26 +11,27 @@
     ```
     - update: 
         - ```
-            npm uninstall -g angular-cli @angular/cli
-            ```              
+          npm uninstall -g angular-cli @angular/cli
+          ```              
         - ```
-            npm cache verify
-            ```
+          npm cache verify
+          ```
         - ```
-            npm install -g @angular/cli
-            ```
+          npm install -g @angular/cli
+          ```
 
 
 
 ## Create Project
 - ```
-    ng new "projectName" --no-strict --standalone false --routing false
-    ```
+  ng new "projectName" --no-strict --standalone false --routing false (optional) --skip-tests
+  ```
 
 description:<br>
     - `no-strict`: disable strict mode<br>
     - `standalone false`: <br>
     - `routing false`: <br>
+    - `skip-tests`: doesn't create `component.specs.ts` file; <br>
 - `cd "projectName"`;
 - `code .`
 - `ng serve`
@@ -71,9 +72,9 @@ export class ProductAlertsComponent {
 
 ### **HTML example file**
 ```html
-    <button type="button" (click)="alertMe()">
-        Notify Me!
-    </button>
+<button type="button" (click)="alertMe()">
+    Notify Me!
+</button>
 ```
 
 
@@ -103,7 +104,18 @@ import { ProductAlertsComponent } from './product-alerts/product-alerts.componen
 <button type="button" (click)="notify.emit()">Notify Me</button>
 ```
 
+### Creating custom events
+- creation example:
+```ts
+serverCreated = new EventEmitter<{serverName: string, serverContent: string}>();
+```
+- usage example:
+```html
+<button (serverCreated)="onServerCreation()">Add Server</button>
+```
+- explanation:
 
+'serverCreated' is the name of the custom event; the `EventEmitter` is of generic type, hence the usage of '<>'; then it needs to some information and its data type, in this case it is receiving an object that contains two elements of type string; the '()' in the end serves to call the EventEmitter constructor so that the `new` keyword in the beginning of the statement can create a new object of EventEmitter to be stored in 'serverCreated'.
 
 ## NAVIGATION
 - in `AppModule` add a route with a path
@@ -157,10 +169,22 @@ ngOnInit() {
 
 
 
+## IMPORTANT COMMANDS
+
+### Creating new component
+
+- ```cmd
+  ng generate component 'componentName'
+  ```
+
+- ```cmd
+  ng g c 'componentName'
+  ```
+
 ### Adding Bootstrap
 - ```
-    npm install --save bootstrap@5
-    ```
+  npm install --save bootstrap@5
+  ```
     (@5 refers to version 5 of Bootstrap)
 - in file `angular.json` add the bootstrap file in "styles" section: 
 ```
