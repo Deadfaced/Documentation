@@ -5,16 +5,27 @@
     - install: https://nodejs.org/en
     - update: unistall node first, then install from the website 
 - angular cli:
-    - install: `npm install -g @angular/cli`
+    - install:
+    ```
+    npm install -g @angular/cli
+    ```
     - update: 
-        - `npm uninstall -g angular-cli @angular/cli`              
-        - `npm cache verify`
-        - `npm install -g @angular/cli`
+        - ```
+            npm uninstall -g angular-cli @angular/cli
+            ```              
+        - ```
+            npm cache verify
+            ```
+        - ```
+            npm install -g @angular/cli
+            ```
 
 
 
 ## Create Project
-- `ng new "projectName" --no-strict --standalone false --routing false`
+- ```
+    ng new "projectName" --no-strict --standalone false --routing false
+    ```
 
 description:<br>
     - `no-strict`: disable strict mode<br>
@@ -147,5 +158,11 @@ ngOnInit() {
 
 
 ### Adding Bootstrap
-- `npm install --save bootstrap@5` (@5 refers to version 5 of Bootstrap)
-- in file `angular.json` add the bootstrap file in "styles" section: `"node_modules/bootstrap/dist/css/bootstrap.min.css"`
+- ```
+    npm install --save bootstrap@5
+    ```
+    (@5 refers to version 5 of Bootstrap)
+- in file `angular.json` add the bootstrap file in "styles" section: 
+```
+"node_modules/bootstrap/dist/css/bootstrap.min.css"
+```
