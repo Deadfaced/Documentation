@@ -218,9 +218,58 @@ ngOnInit() {
 
 
 
-### Managing data
+### Creating a Basic Attribute Directive
 
+- create a new folder like `basic-attribute` and inside create a directive file `basic-attribute.directive.ts`;
+- this file must have the `@Directive` operator which must be imported from `@angular/core` and it will receive an object that must contain the 'selector' name (example: "[appBasicAttribute]"). This 'selector' name should have '[]' to tell that this 'selector' will add an attribute to the element and now when we call this directive on an element we don't need to put '[]' around its name because it's already declared in the 'selector' name;
+- this class' constructor must receive the `ElementRef` as parameter and the onInit method should set the functionality of this directive;
+- add this new directive in 'declarations' in `app.module.ts` and import it;
+- now we can add this new directive in an element like this: `<p appBasicAttribute>I have a new directive!</p>
 
+`basic-attribute.directive.ts` example:
+```ts
+import { Directive, ElementRef, OnInit } from '@angular/core';
+
+@Directive({
+  selector: 'appBasicAttribute'
+})
+
+export class BasicAttributeDirective implements OnInit{
+  constructor(private elRef: ElementRef){
+
+  }
+
+  ngOnInit(){
+    this.elRef.nativeElement.style.backgroundColor = 'green';
+  }
+}
+```
+
+*notes:
+- 'elRef' is any name you want to give. `ElementRef` is a reference to the element that this directive will receive as parameter in order to alter its attributes;
+- `nativeElement` holds the underlying element of the DOM object;
+- this is NOT a good practice. It's only mentioned for reference purposes.
+
+#### Using Renderer
+
+Example:
+```ts
+import { Directive, OnInit, ElementRef, Renderer2 } from '@angular/core';
+
+@Directive({
+  selector: '[appBetterHighlight]'
+})
+export class BetterHighlightDirective implements OnInit{
+  constructor(private elRef: ElementRef, private renderer: Renderer2){}
+
+  ngOnInit(){
+    this.renderer.setStyle(this.elRef.nativeElement, 'background-color', 'blue');
+  }
+}
+```
+Changes:
+- we now import 'Renderer2' and also add it to the parameters of the constructor;
+- in the `ngOnInit()` method we now call the renderer to access its methods like `setStyle()` to change the DOM element.
 
 ## IMPORTANT COMMANDS
 
@@ -232,6 +281,16 @@ ngOnInit() {
 
 - ```cmd
   ng g c 'componentName'
+  ```
+
+### Creating new directive
+
+- ```cmd
+  ng generate directive ´directiveName'
+  ```
+
+- ```cmd
+  ng g d ´directiveName'
   ```
 
 ### Adding Bootstrap
