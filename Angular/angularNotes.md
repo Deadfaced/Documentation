@@ -99,23 +99,76 @@ import { ProductAlertsComponent } from './product-alerts/product-alerts.componen
 ## Passing data to a parent component
 - import `Output` and `EventEmitter` from `@angular/core`;
 - define a property with an `@Output` decorator and an instance of `EventEmitter()`;
-- bind an event to call the emit:
+- add a click event (the data is passed by adding `$event`as a parameter):
+
+#### **EXAMPLE**
+
+`child.component.html`
 ```html
-<button type="button" (click)="notify.emit()">Notify Me</button>
+<button type="button" (click)="sendData($event)">Notify Me</button>
 ```
+
+`child.component.ts`
+```ts
+export class ChildComponent{
+  @Output() dataSender = new EventEmitter<dataType>
+
+  sendData(event){
+    this.dataSender.emit(event);
+  }
+}
+```
+Description:
+- the `@Output` declarator allows data to be able to be passed to its parent component;
+- we then create a property ("dataSender") as a new `EventEmitter` to tell the parente component that something has changed and inside the '<>' we tell the data type of the data we want to pass to the parent component;
+- the `sendData()` is the method that is going to be called on click;
+- then the `dataSender` event emitter needs to emit to the parent component the data we want to pass
+
+`parent.component.html`
+```html
+<app-child-component (dataSender)="onDataSent($event)" />
+```
+
+`parent.component.ts`
+```ts
+export class ParentComponent{
+  onDataSent(event){
+    console.log(event);
+  }
+}
+```
+Description:
+- in the parent component when we call its child component we add to it a 'dataSender' event instead of a click event and we assign it to a method created in the parent component (this 'dataSender' event needs to have the exact same name as an EventeEmitter from its child component);
+- since we are passing the `$event` data in the method we can already access it in the parent component as shown in the `console.log(event)`;
 
 ### Creating custom events
 - creation example:
+
+```html
+<button type="button" (click)="onCreateServer($event)">Create Server</button>
+```
+
 ```ts
 serverCreated = new EventEmitter<{serverName: string, serverContent: string}>();
+
+onCreateServer(event){
+  this.serverCreated.emit(event);
+}
 ```
 - usage example:
 ```html
-<button (serverCreated)="onServerCreation()">Add Server</button>
+<app-server (serverCreated)="onServerCreation($event)" />
 ```
-- explanation:
 
-'serverCreated' is the name of the custom event; the `EventEmitter` is of generic type, hence the usage of '<>'; then it needs to some information and its data type, in this case it is receiving an object that contains two elements of type string; the '()' in the end serves to call the EventEmitter constructor so that the `new` keyword in the beginning of the statement can create a new object of EventEmitter to be stored in 'serverCreated'.
+```ts
+onServerCreation(event){
+  ...
+}
+```
+Explanation:
+
+- 'serverCreated' is the name of the custom event; the `EventEmitter` is of generic type, hence the usage of '<>'; then it needs receive to some information and its data type, in this case it is receiving an object that contains two elements of type string; the '()' in the end serves to call the EventEmitter constructor so that the `new` keyword in the beginning of the statement can create a new object of EventEmitter to be stored in 'serverCreated';
+- since we are assigning this EventEmitter to 'serverCreated' we then call it in the parent component inside the child component tag and assign it to an existing method in the parent component;
 
 ## NAVIGATION
 - in `AppModule` add a route with a path
