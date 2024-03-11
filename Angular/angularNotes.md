@@ -4,11 +4,8 @@
 
 - [Setup](#setup)
 - [Create Project](#create-project)
-  - [Description](#description)
-  - [**HTML example file**](#html-example-file)
 - [Passing data to a child component](#passing-data-to-a-child-component)
 - [Passing data to a parent component](#passing-data-to-a-parent-component)
-    - [**EXAMPLE**](#example)
   - [Creating custom events](#creating-custom-events)
 - [NAVIGATION](#navigation)
   - [Creating a Basic Attribute Directive](#creating-a-basic-attribute-directive)
@@ -58,12 +55,19 @@ description:<br>
 - `code .`
 - `ng serve`
 
-### NG Directives 
+
+
+## NG Directives
+Structural directives:
 - `*ngIf` (replaced by `@if` in newer versions);
 - `*ngFor` (replaced by `@for` in newer versions);
     - get the index when using ngFor: `*ngFor="let item of items; let i = index"`
+
+Built-in directives:
 - `ngStyle` - `[ngStyle]="{style: condition}"` example: `[ngStyle]="{backgroundColor: getColor()}"`;
 - `ngClass` - `[ngClass]="{'className': %condition%}"` example: `[ngClass]="{online: serverStatus === 'online'}"`;
+
+
 
 ### **TS example file**
 ```ts
@@ -85,14 +89,14 @@ export class ProductAlertsComponent {
   }
 }
 ```
-### Description
+Description
 - `standalone`: if 'true' it's not needed to add in NG Modules
 - `imports`: like 'Components' property in Vue
 - `selector`: defines the name of this component's tag
 - `template`/`templateUrl`: HTML code or link to HTML file
 - `style`/`styleUrl`: CSS code or link to CSS stylesheet
 
-### **HTML example file**
+**HTML example file**
 ```html
 <button type="button" (click)="alertMe()">
     Notify Me!
@@ -123,7 +127,7 @@ import { ProductAlertsComponent } from './product-alerts/product-alerts.componen
 - define a property with an `@Output` decorator and an instance of `EventEmitter()`;
 - add a click event (the data is passed by adding `$event`as a parameter):
 
-#### **EXAMPLE**
+**EXAMPLE**
 
 `child.component.html`
 ```html
@@ -196,7 +200,7 @@ Explanation:
 - in `AppModule` add a route with a path
 ```ts
 RouterModule.forRoot([
-    { path: 'products/:roductId', component: ProductDetailsComponent },
+    { path: 'products/:productId', component: ProductDetailsComponent },
 ])
 ```
 - in parent component include `routerLink`:
