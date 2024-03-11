@@ -1,5 +1,27 @@
 <h1> ANGULAR </h1>
 
+<h1>Table of Contents</h1>
+
+- [Setup](#setup)
+- [Create Project](#create-project)
+  - [Description](#description)
+  - [**HTML example file**](#html-example-file)
+- [Passing data to a child component](#passing-data-to-a-child-component)
+- [Passing data to a parent component](#passing-data-to-a-parent-component)
+    - [**EXAMPLE**](#example)
+  - [Creating custom events](#creating-custom-events)
+- [NAVIGATION](#navigation)
+  - [Creating a Basic Attribute Directive](#creating-a-basic-attribute-directive)
+    - [Using Renderer](#using-renderer)
+  - [Using HostListener to listen to host events](#using-hostlistener-to-listen-to-host-events)
+  - [Using HostBinding to Bind to Host Properties](#using-hostbinding-to-bind-to-host-properties)
+    - [**Binding to Directive Properties**](#binding-to-directive-properties)
+- [IMPORTANT COMMANDS](#important-commands)
+  - [Creating new component](#creating-new-component)
+  - [Creating new directive](#creating-new-directive)
+  - [Adding Bootstrap](#adding-bootstrap)
+
+
 ## Setup
 - node latest version
     - install: https://nodejs.org/en
