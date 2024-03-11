@@ -271,6 +271,70 @@ Changes:
 - we now import 'Renderer2' and also add it to the parameters of the constructor;
 - in the `ngOnInit()` method we now call the renderer to access its methods like `setStyle()` to change the DOM element.
 
+
+
+### Using HostListener to listen to host events
+- import 'HostListener' from '@angular/core';
+- call the HostListener and specify the reserved name of the event (example: 'mouseover');
+- we can pass the event data as parameter;
+- inside the 'HostListener' method we add what we want to change when the event is triggered.
+
+Example:
+```ts
+@HostListener('mouseenter') mouseOver(eventData: Event){
+  this.renderer.setStyle(this.elRef.nativeElement, 'background-color', 'blue');
+}
+
+@HostListener('mouseleave') mouseLeave(eventData: Event){
+  this.renderer.setStyle(this.elRef.nativeElement, 'background-color', 'transparent');
+}
+```
+
+
+
+### Using HostBinding to Bind to Host Properties
+Usage:
+```ts
+@HostBinding('style.backgroundColor') bgColor: string = 'transparent';
+
+@HostListener('mouseenter') mouseOver(eventData: Event){
+  this.bgColor = 'blue';
+}
+
+@HostListener('mouseleave') mouseLeave(eventData: Event){
+  this.bgColor = 'transparent';
+}
+```
+*notes:
+- HostBinding accepts 'style' (as seen above), 'class' (`@HostBinding('class.hidden')`), and 'attr' (`@HostBinding('attr.aria-required)`);
+- also supports a style unit extension: `@HostBinding('style.width.px')`
+
+
+
+#### **Binding to Directive Properties**
+By now we are hard coding the change of the background but we can bind it to a directive property to change it from outside the directive.
+
+To do that we need to assign it to a variable with the @Input decorator so that it can be changed from outside
+
+Usage:
+```ts
+@Input() defaultColor: string = 'transparent';
+@Input() highlightColor: string = 'blue';
+
+ngOnInit(){
+  @HostBinding('style.backgroundColor') bgColor: string = this.defaultColor;
+}
+
+@HostListener('mouseenter') mouseOver(eventData: Event){
+  this.bgColor = this.highlightColor;
+}
+@HostListener('mouseleave') mouseLeave(eventData: Event){
+  this.bgColor = this.defaultColor;
+}
+```
+
+
+
 ## IMPORTANT COMMANDS
 
 ### Creating new component
