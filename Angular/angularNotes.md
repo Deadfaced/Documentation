@@ -365,10 +365,10 @@ ngOnInit() {
 ### 5.1. Creating a Basic Attribute Directive
 
 - create a new folder like `basic-attribute` and inside create a directive file `basic-attribute.directive.ts`;
-- this file must have the `@Directive` operator which must be imported from `@angular/core` and it will receive an object that must contain the 'selector' name (example: "[appBasicAttribute]"). This 'selector' name should have '[]' to tell that this 'selector' will add an attribute to the element and now when we call this directive on an element we don't need to put '[]' around its name because it's already declared in the 'selector' name;
+- this file must have the `@Directive` operator which must be imported from `@angular/core` and it will receive an object that must contain the 'selector' name (example: "[appBasicAttribute]"). This 'selector' name should have '[ ]' to tell that this 'selector' will add an attribute to the element and now when we call this directive on an element we don't need to put '[ ]' around its name because it's already declared in the 'selector' name;
 - this class' constructor must receive the `ElementRef` as parameter and the onInit method should set the functionality of this directive;
 - add this new directive in 'declarations' in `app.module.ts` and import it;
-- now we can add this new directive in an element like this: `<p appBasicAttribute>I have a new directive!</p>
+- now we can add this new directive in an element like this: `<p appBasicAttribute>I have a new directive!</p>`
 
 `basic-attribute.directive.ts` example:
 ```ts
