@@ -43,15 +43,17 @@
 
 ## Create Project
 - ```
-  ng new "projectName" --no-strict --standalone false --routing false (optional) --skip-tests
+  ng new "project-name" --no-strict --standalone false --routing false (optional) --skip-tests
   ```
+
+**IMPORTANT:** when creating a new component it should be named without capital letters and separated by dashes (`-`);
 
 description:<br>
     - `no-strict`: disable strict mode<br>
     - `standalone false`: <br>
     - `routing false`: <br>
     - `skip-tests`: doesn't create `component.specs.ts` file; <br>
-- `cd "projectName"`;
+- `cd "project-name"`;
 - `code .`
 - `ng serve`
 
