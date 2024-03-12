@@ -220,6 +220,11 @@ imports:[
         path: 'products/:productId', //can pass an id
         component: ProductDetailsComponent
       },
+
+      {//in case you want to add a 404 page
+        path: '**',
+        component: PageNotFoundComponent, //ng g c page-not-found
+      }//useful when the user tries to brute force a route
   ]);
 ];
 ```
