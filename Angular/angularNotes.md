@@ -4,21 +4,21 @@
 
 - [1. Setup](#1-setup)
 - [2. Create Project](#2-create-project)
-  - [Building a Structural Directive](#building-a-structural-directive)
-  - [**TS example file**](#ts-example-file)
-- [3. Passing data to a child component](#3-passing-data-to-a-child-component)
-- [4. Passing data to a parent component](#4-passing-data-to-a-parent-component)
-  - [4.1. Creating custom events](#41-creating-custom-events)
-- [5. NAVIGATION / ROUTING](#5-navigation--routing)
-  - [5.1. Creating a Basic Attribute Directive](#51-creating-a-basic-attribute-directive)
-    - [5.1.1. Using Renderer](#511-using-renderer)
-  - [5.2. Using HostListener to listen to host events](#52-using-hostlistener-to-listen-to-host-events)
-  - [5.3. Using HostBinding to Bind to Host Properties](#53-using-hostbinding-to-bind-to-host-properties)
-    - [5.3.1. **Binding to Directive Properties**](#531-binding-to-directive-properties)
-- [6. IMPORTANT COMMANDS](#6-important-commands)
-  - [6.1. Creating new component](#61-creating-new-component)
-  - [6.2. Creating new directive](#62-creating-new-directive)
-  - [6.3. Adding Bootstrap](#63-adding-bootstrap)
+- [3. NG Directives](#3-ng-directives)
+  - [3.1. Building a Structural Directive](#31-building-a-structural-directive)
+  - [3.2. Creating a Basic Attribute Directive](#32-creating-a-basic-attribute-directive)
+    - [3.2.1. Using Renderer](#321-using-renderer)
+  - [3.3. Using HostListener to listen to host events](#33-using-hostlistener-to-listen-to-host-events)
+  - [3.4. Using HostBinding to Bind to Host Properties](#34-using-hostbinding-to-bind-to-host-properties)
+    - [3.4.1. Binding to Directive Properties](#341-binding-to-directive-properties)
+- [4. Passing data to a child component](#4-passing-data-to-a-child-component)
+- [5. Passing data to a parent component](#5-passing-data-to-a-parent-component)
+  - [5.1. Creating custom events](#51-creating-custom-events)
+- [6. NAVIGATION / ROUTING](#6-navigation--routing)
+- [7. IMPORTANT COMMANDS](#7-important-commands)
+  - [7.1. Creating new component](#71-creating-new-component)
+  - [7.2. Creating new directive](#72-creating-new-directive)
+  - [7.3. Adding Bootstrap](#73-adding-bootstrap)
 
 
 
@@ -62,7 +62,43 @@ description:<br>
 
 
 
-## NG Directives
+### **TS example file**
+```ts
+import { Component, Input } from '@angular/core';
+import { Product } from '../products';
+
+@Component({
+    standalone: true,
+    imports: [],
+    selector: 'app-product-alerts',
+    templateUrl: './product-alerts.component.html',
+    styleUrl: './product-alerts.component.css'
+})
+export class ProductAlertsComponent {
+
+  @Input() product: Product | undefined;
+  alertMe(){
+    alert("SUCCESS!");
+  }
+}
+```
+Description
+- `standalone`: if 'true' it's not needed to add in NG Modules
+- `imports`: like 'Components' property in Vue
+- `selector`: defines the name of this component's tag
+- `template`/`templateUrl`: HTML code or link to HTML file
+- `style`/`styleUrl`: CSS code or link to CSS stylesheet
+
+**HTML example file**
+```html
+<button type="button" (click)="alertMe()">
+    Notify Me!
+</button>
+```
+
+
+
+## 3. NG Directives
 Structural directives:
 - `*ngIf` (replaced by `@if` in newer versions);
 - `*ngFor` (replaced by `@for` in newer versions);
@@ -83,7 +119,7 @@ Built-in directives:
 - `ngStyle` - `[ngStyle]="{style: condition}"` example: `[ngStyle]="{backgroundColor: getColor()}"`;
 - `ngClass` - `[ngClass]="{'className': %condition%}"` example: `[ngClass]="{online: serverStatus === 'online'}"`;
 
-### Building a Structural Directive
+### 3.1. Building a Structural Directive
 For this example I will be creating an únless' directive that will be a negation of an ngIf
 - create a new directive:
 
@@ -135,43 +171,125 @@ Explanation>
 - the `createEmbeddedView()` method creates an embedded view (in this case the `TemplateRef`) inside the `ViewComponentRef`;
 
 
-### **TS example file**
+
+### 3.2. Creating a Basic Attribute Directive
+
+- create a new folder like `basic-attribute` and inside create a directive file `basic-attribute.directive.ts`;
+- this file must have the `@Directive` operator which must be imported from `@angular/core` and it will receive an object that must contain the 'selector' name (example: "[appBasicAttribute]"). This 'selector' name should have '[ ]' to tell that this 'selector' will add an attribute to the element and now when we call this directive on an element we don't need to put '[ ]' around its name because it's already declared in the 'selector' name;
+- this class' constructor must receive the `ElementRef` as parameter and the onInit method should set the functionality of this directive;
+- add this new directive in 'declarations' in `app.module.ts` and import it;
+- now we can add this new directive in an element like this: `<p appBasicAttribute>I have a new directive!</p>`
+
+`basic-attribute.directive.ts` example:
 ```ts
-import { Component, Input } from '@angular/core';
-import { Product } from '../products';
+import { Directive, ElementRef, OnInit } from '@angular/core';
 
-@Component({
-    standalone: true,
-    imports: [],
-    selector: 'app-product-alerts',
-    templateUrl: './product-alerts.component.html',
-    styleUrl: './product-alerts.component.css'
+@Directive({
+  selector: 'appBasicAttribute'
 })
-export class ProductAlertsComponent {
 
-  @Input() product: Product | undefined;
-  alertMe(){
-    alert("SUCCESS!");
+export class BasicAttributeDirective implements OnInit{
+  constructor(private elRef: ElementRef){
+
+  }
+
+  ngOnInit(){
+    this.elRef.nativeElement.style.backgroundColor = 'green';
   }
 }
 ```
-Description
-- `standalone`: if 'true' it's not needed to add in NG Modules
-- `imports`: like 'Components' property in Vue
-- `selector`: defines the name of this component's tag
-- `template`/`templateUrl`: HTML code or link to HTML file
-- `style`/`styleUrl`: CSS code or link to CSS stylesheet
 
-**HTML example file**
-```html
-<button type="button" (click)="alertMe()">
-    Notify Me!
-</button>
+*notes:
+- 'elRef' is any name you want to give. `ElementRef` is a reference to the element that this directive will receive as parameter in order to alter its attributes;
+- `nativeElement` holds the underlying element of the DOM object;
+- this is NOT a good practice. It's only mentioned for reference purposes.
+
+#### 3.2.1. Using Renderer
+
+Example:
+```ts
+import { Directive, OnInit, ElementRef, Renderer2 } from '@angular/core';
+
+@Directive({
+  selector: '[appBetterHighlight]'
+})
+export class BetterHighlightDirective implements OnInit{
+  constructor(private elRef: ElementRef, private renderer: Renderer2){}
+
+  ngOnInit(){
+    this.renderer.setStyle(this.elRef.nativeElement, 'background-color', 'blue');
+  }
+}
+```
+Changes:
+- we now import 'Renderer2' and also add it to the parameters of the constructor;
+- in the `ngOnInit()` method we now call the renderer to access its methods like `setStyle()` to change the DOM element.
+
+
+
+### 3.3. Using HostListener to listen to host events
+- import 'HostListener' from '@angular/core';
+- call the HostListener and specify the reserved name of the event (example: 'mouseover');
+- we can pass the event data as parameter;
+- inside the 'HostListener' method we add what we want to change when the event is triggered.
+
+Example:
+```ts
+@HostListener('mouseenter') mouseOver(eventData: Event){
+  this.renderer.setStyle(this.elRef.nativeElement, 'background-color', 'blue');
+}
+
+@HostListener('mouseleave') mouseLeave(eventData: Event){
+  this.renderer.setStyle(this.elRef.nativeElement, 'background-color', 'transparent');
+}
 ```
 
 
 
-## 3. Passing data to a child component
+### 3.4. Using HostBinding to Bind to Host Properties
+Usage:
+```ts
+@HostBinding('style.backgroundColor') bgColor: string = 'transparent';
+
+@HostListener('mouseenter') mouseOver(eventData: Event){
+  this.bgColor = 'blue';
+}
+
+@HostListener('mouseleave') mouseLeave(eventData: Event){
+  this.bgColor = 'transparent';
+}
+```
+*notes:
+- HostBinding accepts 'style' (as seen above), 'class' (`@HostBinding('class.hidden')`), and 'attr' (`@HostBinding('attr.aria-required)`);
+- also supports a style unit extension: `@HostBinding('style.width.px')`
+
+
+
+#### 3.4.1. Binding to Directive Properties
+By now we are hard coding the change of the background but we can bind it to a directive property to change it from outside the directive.
+
+To do that we need to assign it to a variable with the @Input decorator so that it can be changed from outside
+
+Usage:
+```ts
+@Input() defaultColor: string = 'transparent';
+@Input() highlightColor: string = 'blue';
+
+ngOnInit(){
+  @HostBinding('style.backgroundColor') bgColor: string = this.defaultColor;
+}
+
+@HostListener('mouseenter') mouseOver(eventData: Event){
+  this.bgColor = this.highlightColor;
+}
+@HostListener('mouseleave') mouseLeave(eventData: Event){
+  this.bgColor = this.defaultColor;
+}
+```
+
+
+
+## 4. Passing data to a child component
 - open terminal and create new component with the following command: `ng generate component product-alerts`;
 - import `Input` from `@angular/core`;
 - define a property with an `@Input` decorator:
@@ -188,7 +306,7 @@ import { ProductAlertsComponent } from './product-alerts/product-alerts.componen
 
 
 
-## 4. Passing data to a parent component
+## 5. Passing data to a parent component
 - import `Output` and `EventEmitter` from `@angular/core`;
 - define a property with an `@Output` decorator and an instance of `EventEmitter()`;
 - add a click event (the data is passed by adding `$event`as a parameter):
@@ -233,7 +351,7 @@ Description:
 - in the parent component when we call its child component we add to it a 'dataSender' event instead of a click event and we assign it to a method created in the parent component (this 'dataSender' event needs to have the exact same name as an EventeEmitter from its child component);
 - since we are passing the `$event` data in the method we can already access it in the parent component as shown in the `console.log(event)`;
 
-### 4.1. Creating custom events
+### 5.1. Creating custom events
 - creation example:
 
 ```html
@@ -262,7 +380,7 @@ Explanation:
 - 'serverCreated' is the name of the custom event; the `EventEmitter` is of generic type, hence the usage of '<>'; then it needs receive to some information and its data type, in this case it is receiving an object that contains two elements of type string; the '()' in the end serves to call the EventEmitter constructor so that the `new` keyword in the beginning of the statement can create a new object of EventEmitter to be stored in 'serverCreated';
 - since we are assigning this EventEmitter to 'serverCreated' we then call it in the parent component inside the child component tag and assign it to an existing method in the parent component;
 
-## 5. NAVIGATION / ROUTING
+## 6. NAVIGATION / ROUTING
 - in `AppModule` import 'RouterModule' and add a route with the desired paths
 ```ts
 import { RouterModule } from '@angular/router';
@@ -362,126 +480,9 @@ ngOnInit() {
 
 
 
-### 5.1. Creating a Basic Attribute Directive
+## 7. IMPORTANT COMMANDS
 
-- create a new folder like `basic-attribute` and inside create a directive file `basic-attribute.directive.ts`;
-- this file must have the `@Directive` operator which must be imported from `@angular/core` and it will receive an object that must contain the 'selector' name (example: "[appBasicAttribute]"). This 'selector' name should have '[ ]' to tell that this 'selector' will add an attribute to the element and now when we call this directive on an element we don't need to put '[ ]' around its name because it's already declared in the 'selector' name;
-- this class' constructor must receive the `ElementRef` as parameter and the onInit method should set the functionality of this directive;
-- add this new directive in 'declarations' in `app.module.ts` and import it;
-- now we can add this new directive in an element like this: `<p appBasicAttribute>I have a new directive!</p>`
-
-`basic-attribute.directive.ts` example:
-```ts
-import { Directive, ElementRef, OnInit } from '@angular/core';
-
-@Directive({
-  selector: 'appBasicAttribute'
-})
-
-export class BasicAttributeDirective implements OnInit{
-  constructor(private elRef: ElementRef){
-
-  }
-
-  ngOnInit(){
-    this.elRef.nativeElement.style.backgroundColor = 'green';
-  }
-}
-```
-
-*notes:
-- 'elRef' is any name you want to give. `ElementRef` is a reference to the element that this directive will receive as parameter in order to alter its attributes;
-- `nativeElement` holds the underlying element of the DOM object;
-- this is NOT a good practice. It's only mentioned for reference purposes.
-
-#### 5.1.1. Using Renderer
-
-Example:
-```ts
-import { Directive, OnInit, ElementRef, Renderer2 } from '@angular/core';
-
-@Directive({
-  selector: '[appBetterHighlight]'
-})
-export class BetterHighlightDirective implements OnInit{
-  constructor(private elRef: ElementRef, private renderer: Renderer2){}
-
-  ngOnInit(){
-    this.renderer.setStyle(this.elRef.nativeElement, 'background-color', 'blue');
-  }
-}
-```
-Changes:
-- we now import 'Renderer2' and also add it to the parameters of the constructor;
-- in the `ngOnInit()` method we now call the renderer to access its methods like `setStyle()` to change the DOM element.
-
-
-
-### 5.2. Using HostListener to listen to host events
-- import 'HostListener' from '@angular/core';
-- call the HostListener and specify the reserved name of the event (example: 'mouseover');
-- we can pass the event data as parameter;
-- inside the 'HostListener' method we add what we want to change when the event is triggered.
-
-Example:
-```ts
-@HostListener('mouseenter') mouseOver(eventData: Event){
-  this.renderer.setStyle(this.elRef.nativeElement, 'background-color', 'blue');
-}
-
-@HostListener('mouseleave') mouseLeave(eventData: Event){
-  this.renderer.setStyle(this.elRef.nativeElement, 'background-color', 'transparent');
-}
-```
-
-
-
-### 5.3. Using HostBinding to Bind to Host Properties
-Usage:
-```ts
-@HostBinding('style.backgroundColor') bgColor: string = 'transparent';
-
-@HostListener('mouseenter') mouseOver(eventData: Event){
-  this.bgColor = 'blue';
-}
-
-@HostListener('mouseleave') mouseLeave(eventData: Event){
-  this.bgColor = 'transparent';
-}
-```
-*notes:
-- HostBinding accepts 'style' (as seen above), 'class' (`@HostBinding('class.hidden')`), and 'attr' (`@HostBinding('attr.aria-required)`);
-- also supports a style unit extension: `@HostBinding('style.width.px')`
-
-
-
-#### 5.3.1. **Binding to Directive Properties**
-By now we are hard coding the change of the background but we can bind it to a directive property to change it from outside the directive.
-
-To do that we need to assign it to a variable with the @Input decorator so that it can be changed from outside
-
-Usage:
-```ts
-@Input() defaultColor: string = 'transparent';
-@Input() highlightColor: string = 'blue';
-
-ngOnInit(){
-  @HostBinding('style.backgroundColor') bgColor: string = this.defaultColor;
-}
-
-@HostListener('mouseenter') mouseOver(eventData: Event){
-  this.bgColor = this.highlightColor;
-}
-@HostListener('mouseleave') mouseLeave(eventData: Event){
-  this.bgColor = this.defaultColor;
-}
-```
-
-
-
-## 6. IMPORTANT COMMANDS
-
-### 6.1. Creating new component
+### 7.1. Creating new component
 
 - ```cmd
   ng generate component 'componentName'
@@ -491,7 +492,7 @@ ngOnInit(){
   ng g c 'componentName'
   ```
 
-### 6.2. Creating new directive
+### 7.2. Creating new directive
 
 - ```cmd
   ng generate directive ´directiveName'
@@ -501,7 +502,7 @@ ngOnInit(){
   ng g d ´directiveName'
   ```
 
-### 6.3. Adding Bootstrap
+### 7.3. Adding Bootstrap
 - ```
   npm install --save bootstrap@5
   ```
