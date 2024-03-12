@@ -11,6 +11,7 @@
   - [3.3. Using HostListener to listen to host events](#33-using-hostlistener-to-listen-to-host-events)
   - [3.4. Using HostBinding to Bind to Host Properties](#34-using-hostbinding-to-bind-to-host-properties)
     - [3.4.1. Binding to Directive Properties](#341-binding-to-directive-properties)
+  - [Creating a class toggle using HostBinding and HostListener in a custom directive](#creating-a-class-toggle-using-hostbinding-and-hostlistener-in-a-custom-directive)
 - [4. Passing data to a child component](#4-passing-data-to-a-child-component)
 - [5. Passing data to a parent component](#5-passing-data-to-a-parent-component)
   - [5.1. Creating custom events](#51-creating-custom-events)
@@ -285,6 +286,27 @@ ngOnInit(){
 @HostListener('mouseleave') mouseLeave(eventData: Event){
   this.bgColor = this.defaultColor;
 }
+```
+
+
+
+### Creating a class toggle using HostBinding and HostListener in a custom directive
+`custom.directive.ts`
+```ts
+export class customDirective{
+  @HostBinding('class.open') toggle = false;
+
+  @HostListener('click') toggleDropdown(){
+    this.toggle = !this.toggle;
+  }
+}
+```
+
+`app.component.html`
+```html
+<div class="dropdown btn-group" customDirective>
+  ...
+</div>
 ```
 
 
