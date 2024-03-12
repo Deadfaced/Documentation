@@ -255,6 +255,14 @@ or passing a bindable property (variable):
     {{ product.name }}
 </a>
 ```
+
+**note:* you can add the `routerLinkActive` directive to add a class to the `<a>` or `<button>` when that routerLink is selected. Example:
+```html
+<a routerLink="/hiragana-page" routerLinkActive="text-danger">
+  Hiragana
+</a>
+```
+
 - in child component import `ActivatedRoute` from `@angular/router` and `OnInit` from `@angular/core`
 ```ts
 import { Component, OnInit } from '@angular/core';
