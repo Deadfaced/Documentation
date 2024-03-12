@@ -2,24 +2,26 @@
 
 <h1>Table of Contents</h1>
 
-- [Setup](#setup)
-- [Create Project](#create-project)
-- [Passing data to a child component](#passing-data-to-a-child-component)
-- [Passing data to a parent component](#passing-data-to-a-parent-component)
-  - [Creating custom events](#creating-custom-events)
-- [NAVIGATION / ROUTING](#navigation--routing)
-  - [Creating a Basic Attribute Directive](#creating-a-basic-attribute-directive)
-    - [Using Renderer](#using-renderer)
-  - [Using HostListener to listen to host events](#using-hostlistener-to-listen-to-host-events)
-  - [Using HostBinding to Bind to Host Properties](#using-hostbinding-to-bind-to-host-properties)
-    - [**Binding to Directive Properties**](#binding-to-directive-properties)
-- [IMPORTANT COMMANDS](#important-commands)
-  - [Creating new component](#creating-new-component)
-  - [Creating new directive](#creating-new-directive)
-  - [Adding Bootstrap](#adding-bootstrap)
+- [1. Setup](#1-setup)
+- [2. Create Project](#2-create-project)
+  - [**TS example file**](#ts-example-file)
+- [3. Passing data to a child component](#3-passing-data-to-a-child-component)
+- [4. Passing data to a parent component](#4-passing-data-to-a-parent-component)
+  - [4.1. Creating custom events](#41-creating-custom-events)
+- [5. NAVIGATION / ROUTING](#5-navigation--routing)
+  - [5.1. Creating a Basic Attribute Directive](#51-creating-a-basic-attribute-directive)
+    - [5.1.1. Using Renderer](#511-using-renderer)
+  - [5.2. Using HostListener to listen to host events](#52-using-hostlistener-to-listen-to-host-events)
+  - [5.3. Using HostBinding to Bind to Host Properties](#53-using-hostbinding-to-bind-to-host-properties)
+    - [5.3.1. **Binding to Directive Properties**](#531-binding-to-directive-properties)
+- [6. IMPORTANT COMMANDS](#6-important-commands)
+  - [6.1. Creating new component](#61-creating-new-component)
+  - [6.2. Creating new directive](#62-creating-new-directive)
+  - [6.3. Adding Bootstrap](#63-adding-bootstrap)
 
 
-## Setup
+
+## 1. Setup
 - node latest version
     - install: https://nodejs.org/en
     - update: unistall node first, then install from the website 
@@ -41,7 +43,7 @@
 
 
 
-## Create Project
+## 2. Create Project
 - ```
   ng new "project-name" --no-strict --standalone false --routing false (optional) --skip-tests
   ```
@@ -54,8 +56,8 @@ description:<br>
     - `routing false`: <br>
     - `skip-tests`: doesn't create `component.specs.ts` file; <br>
 - `cd "project-name"`;
-- `code .`
-- `ng serve`
+- `code .`;
+- `ng serve`.
 
 
 
@@ -69,6 +71,56 @@ Built-in directives:
 - `ngStyle` - `[ngStyle]="{style: condition}"` example: `[ngStyle]="{backgroundColor: getColor()}"`;
 - `ngClass` - `[ngClass]="{'className': %condition%}"` example: `[ngClass]="{online: serverStatus === 'online'}"`;
 
+### Building a Structural Directive
+For this example I will be creating an únless' directive that will be a negation of an ngIf
+- create a new directive:
+
+```cmd
+  ng g d unless
+```
+
+Templates:
+
+`unless.directive.ts`
+```ts
+import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
+
+@Directive({
+  selector: '[appUnless]'
+})
+
+export class UnlessDirective{
+  @Input() set appUnless(condition: boolean){
+    if (!condition){
+      this.vcRef.createEmbbededView(this.templateRef);
+    } else{
+      this.vcRef.clear();
+    }
+  }
+
+  constructor(private templateRef: TemplateRef<any>, private vcRef: ViewContainerRef){ }
+}
+```
+
+`main.component.html`
+```html
+<div *ngIf="condition">
+  <p>True</p>
+</div>
+<div *appUnless="condition">
+  <p>False</p>
+</div>
+```
+
+Explanation>
+
+- 'appUnless' is a property bound to the condition. We add a setter with the keyword `set` to execute a method whenever the condition changes;
+- since we are working with boolean conditions this method will receive a boolean as parameter `(condition: boolean)`;
+- we use `*appUnless="condition"` instead of `*appUnless="!condition"` because we are already checking the negation of the condition inside of the directive;
+- angular automatically transforms `<div *ngIf="" ...>` to `<ng-template [ngIf]="" ...>`, which means 'ngIf' is a property bound to a condition just like 'appUnless'. So when we write `<div *appUnless="">` angular is transforming this to `<ng-template [app-Unless]=""`;
+- since this is basically creating an `<ng-template />` we need to get this template in our directive so we pass it as parameter in its constructor as a `TemplateRef`;
+- the `ViewComponentRef` gets the reference for the component it is inserted in. This is used to mark the place where angular will insert the template;
+- the `createEmbeddedView()` method creates an embedded view (in this case the `TemplateRef`) inside the `ViewComponentRef`;
 
 
 ### **TS example file**
@@ -107,7 +159,7 @@ Description
 
 
 
-## Passing data to a child component
+## 3. Passing data to a child component
 - open terminal and create new component with the following command: `ng generate component product-alerts`;
 - import `Input` from `@angular/core`;
 - define a property with an `@Input` decorator:
@@ -124,7 +176,7 @@ import { ProductAlertsComponent } from './product-alerts/product-alerts.componen
 
 
 
-## Passing data to a parent component
+## 4. Passing data to a parent component
 - import `Output` and `EventEmitter` from `@angular/core`;
 - define a property with an `@Output` decorator and an instance of `EventEmitter()`;
 - add a click event (the data is passed by adding `$event`as a parameter):
@@ -169,7 +221,7 @@ Description:
 - in the parent component when we call its child component we add to it a 'dataSender' event instead of a click event and we assign it to a method created in the parent component (this 'dataSender' event needs to have the exact same name as an EventeEmitter from its child component);
 - since we are passing the `$event` data in the method we can already access it in the parent component as shown in the `console.log(event)`;
 
-### Creating custom events
+### 4.1. Creating custom events
 - creation example:
 
 ```html
@@ -198,7 +250,7 @@ Explanation:
 - 'serverCreated' is the name of the custom event; the `EventEmitter` is of generic type, hence the usage of '<>'; then it needs receive to some information and its data type, in this case it is receiving an object that contains two elements of type string; the '()' in the end serves to call the EventEmitter constructor so that the `new` keyword in the beginning of the statement can create a new object of EventEmitter to be stored in 'serverCreated';
 - since we are assigning this EventEmitter to 'serverCreated' we then call it in the parent component inside the child component tag and assign it to an existing method in the parent component;
 
-## NAVIGATION / ROUTING
+## 5. NAVIGATION / ROUTING
 - in `AppModule` import 'RouterModule' and add a route with the desired paths
 ```ts
 import { RouterModule } from '@angular/router';
@@ -298,7 +350,7 @@ ngOnInit() {
 
 
 
-### Creating a Basic Attribute Directive
+### 5.1. Creating a Basic Attribute Directive
 
 - create a new folder like `basic-attribute` and inside create a directive file `basic-attribute.directive.ts`;
 - this file must have the `@Directive` operator which must be imported from `@angular/core` and it will receive an object that must contain the 'selector' name (example: "[appBasicAttribute]"). This 'selector' name should have '[]' to tell that this 'selector' will add an attribute to the element and now when we call this directive on an element we don't need to put '[]' around its name because it's already declared in the 'selector' name;
@@ -330,7 +382,7 @@ export class BasicAttributeDirective implements OnInit{
 - `nativeElement` holds the underlying element of the DOM object;
 - this is NOT a good practice. It's only mentioned for reference purposes.
 
-#### Using Renderer
+#### 5.1.1. Using Renderer
 
 Example:
 ```ts
@@ -353,7 +405,7 @@ Changes:
 
 
 
-### Using HostListener to listen to host events
+### 5.2. Using HostListener to listen to host events
 - import 'HostListener' from '@angular/core';
 - call the HostListener and specify the reserved name of the event (example: 'mouseover');
 - we can pass the event data as parameter;
@@ -372,7 +424,7 @@ Example:
 
 
 
-### Using HostBinding to Bind to Host Properties
+### 5.3. Using HostBinding to Bind to Host Properties
 Usage:
 ```ts
 @HostBinding('style.backgroundColor') bgColor: string = 'transparent';
@@ -391,7 +443,7 @@ Usage:
 
 
 
-#### **Binding to Directive Properties**
+#### 5.3.1. **Binding to Directive Properties**
 By now we are hard coding the change of the background but we can bind it to a directive property to change it from outside the directive.
 
 To do that we need to assign it to a variable with the @Input decorator so that it can be changed from outside
@@ -415,9 +467,9 @@ ngOnInit(){
 
 
 
-## IMPORTANT COMMANDS
+## 6. IMPORTANT COMMANDS
 
-### Creating new component
+### 6.1. Creating new component
 
 - ```cmd
   ng generate component 'componentName'
@@ -427,7 +479,7 @@ ngOnInit(){
   ng g c 'componentName'
   ```
 
-### Creating new directive
+### 6.2. Creating new directive
 
 - ```cmd
   ng generate directive ´directiveName'
@@ -437,7 +489,7 @@ ngOnInit(){
   ng g d ´directiveName'
   ```
 
-### Adding Bootstrap
+### 6.3. Adding Bootstrap
 - ```
   npm install --save bootstrap@5
   ```
