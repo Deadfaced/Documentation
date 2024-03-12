@@ -7,7 +7,7 @@
 - [Passing data to a child component](#passing-data-to-a-child-component)
 - [Passing data to a parent component](#passing-data-to-a-parent-component)
   - [Creating custom events](#creating-custom-events)
-- [NAVIGATION](#navigation)
+- [NAVIGATION / ROUTING](#navigation--routing)
   - [Creating a Basic Attribute Directive](#creating-a-basic-attribute-directive)
     - [Using Renderer](#using-renderer)
   - [Using HostListener to listen to host events](#using-hostlistener-to-listen-to-host-events)
@@ -196,15 +196,54 @@ Explanation:
 - 'serverCreated' is the name of the custom event; the `EventEmitter` is of generic type, hence the usage of '<>'; then it needs receive to some information and its data type, in this case it is receiving an object that contains two elements of type string; the '()' in the end serves to call the EventEmitter constructor so that the `new` keyword in the beginning of the statement can create a new object of EventEmitter to be stored in 'serverCreated';
 - since we are assigning this EventEmitter to 'serverCreated' we then call it in the parent component inside the child component tag and assign it to an existing method in the parent component;
 
-## NAVIGATION
-- in `AppModule` add a route with a path
+## NAVIGATION / ROUTING
+- in `AppModule` import 'RouterModule' and add a route with the desired paths
 ```ts
-RouterModule.forRoot([
-    { path: 'products/:productId', component: ProductDetailsComponent },
-])
+import { RouterModule } from '@angular/router';
+
+...
+
+imports:[
+  BrowserModule,
+  RouterModule.forRoot([
+      {
+        path: 'katakana-page',
+        component: KatakanaPageComponent
+      },
+      {
+        path: 'hiragana-page',
+        component: HiraganaPageComponent
+      },
+      {
+        path: 'products/:productId', //can pass an id
+        component: ProductDetailsComponent
+      },
+  ]);
+];
 ```
+
+- replace the parent component to have a router-outlet:
+
+`app-parent.component.html` delete this:
+```html
+<app-hiragana-page />
+<app-katakana-page />
+```
+
+`app-parent.component.html` add this:
+```html
+<router-outlet />
+```
+
 - in parent component include `routerLink`:
-```ts
+```html
+<a routerLink="/hiragana-page">
+  Hiragana
+</a>
+```
+
+or passing a bindable property (variable):
+```html
 <a [routerLink]="['/products', product.id]">
     {{ product.name }}
 </a>
