@@ -4,6 +4,7 @@
 
 - [1. Setup](#1-setup)
 - [2. Create Project](#2-create-project)
+  - [Building a Structural Directive](#building-a-structural-directive)
   - [**TS example file**](#ts-example-file)
 - [3. Passing data to a child component](#3-passing-data-to-a-child-component)
 - [4. Passing data to a parent component](#4-passing-data-to-a-parent-component)
@@ -66,6 +67,17 @@ Structural directives:
 - `*ngIf` (replaced by `@if` in newer versions);
 - `*ngFor` (replaced by `@for` in newer versions);
     - get the index when using ngFor: `*ngFor="let item of items; let i = index"`
+- `ngSwitch`: must be used with `ngSwitchCase` and/or `ngSwitchDefault`.
+
+ngSwitch example:
+```html
+<div [ngSwitch]="value">
+  <p *ngSwitchCase="5">5</p>
+  <p *ngSwitchCase="10">10</p>
+  <p *ngSwitchCase="20">20</p>
+  <p *ngSwitchDefault>0</p>
+</div>
+```
 
 Built-in directives:
 - `ngStyle` - `[ngStyle]="{style: condition}"` example: `[ngStyle]="{backgroundColor: getColor()}"`;
