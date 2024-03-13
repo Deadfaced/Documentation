@@ -352,7 +352,7 @@ export class ChildComponent{
 ```
 Description:
 - the `@Output` declarator allows data to be able to be passed to its parent component;
-- we then create a property ("dataSender") as a new `EventEmitter` to tell the parente component that something has changed and inside the '<>' we tell the data type of the data we want to pass to the parent component;
+- we then create a property ("dataSender") as a new `EventEmitter` to tell the parent component that something has changed and inside the '<>' we tell the data type of the data we want to pass to the parent component;
 - the `sendData()` is the method that is going to be called on click;
 - then the `dataSender` event emitter needs to emit to the parent component the data we want to pass
 
