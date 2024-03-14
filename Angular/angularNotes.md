@@ -543,6 +543,11 @@ export class NewServerComponent{
 - declare the provider;
 - add the data type as a constructor parameter;
 
+**Additional notes:**
+- when injecting a service into another service we should add the declarator `@Injectable()` to the service receiving the injection;
+- we should also add the service in the 'providers' array in `app.module.ts`;
+- when we want to use the same service/s in sibling components we can import those services in the parent component. There's no harm in it and it will propagate to children components
+
 
 
 ## 8. IMPORTANT COMMANDS
