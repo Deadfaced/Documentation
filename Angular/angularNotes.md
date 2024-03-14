@@ -17,6 +17,7 @@
   - [5.1. Creating custom events](#51-creating-custom-events)
 - [6. NAVIGATION / ROUTING](#6-navigation--routing)
 - [7. Services](#7-services)
+  - [Creating a Data Service](#creating-a-data-service)
 - [8. IMPORTANT COMMANDS](#8-important-commands)
   - [8.1. Creating new component](#81-creating-new-component)
   - [8.2. Creating new directive](#82-creating-new-directive)
@@ -547,6 +548,45 @@ export class NewServerComponent{
 - when injecting a service into another service we should add the declarator `@Injectable()` to the service receiving the injection;
 - we should also add the service in the 'providers' array in `app.module.ts`;
 - when we want to use the same service/s in sibling components we can import those services in the parent component. There's no harm in it and it will propagate to children components
+
+### Creating a Data Service
+`shopping-list.service.ts`
+```ts
+ingredientsChanged = new EventEmitter<Ingredient[]>();
+
+private ingredients: Ingredient[] = [
+    new Ingredient('Apples', 5),
+    new Ingredient('Strawberries', 17),
+    new Ingredient('Bananas', 12),
+    new Ingredient('Pineapples', 2),
+];
+
+getIngredients(){
+    return this.ingredients.slice();
+}
+```
+
+`shopping-list.component.ts`
+```ts
+import { Ingredient } from ...;
+import { ShoppingListService } from ...;
+
+export class ShoppingListComponent implements OnInit{
+  ingredients = Ingredient[];
+
+  constructor(private shoppingListService: ShoppingListService){}
+
+  ngOnInit(){
+    this.ingredients = this.shoppingListService.getIngredients();
+    this.shoppingListService.ingredientsChanged.subscribe((ingredients: Ingredient[]) => {
+      this.ingredients = ingredients;
+    })
+  }
+}
+```
+**IMPORTANT**
+
+The subscribe method is linked to an EventEmitter to update whenever changes were made and should be called in `ngOnInit()`
 
 
 
