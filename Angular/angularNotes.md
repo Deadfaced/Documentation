@@ -11,15 +11,16 @@
   - [3.3. Using HostListener to listen to host events](#33-using-hostlistener-to-listen-to-host-events)
   - [3.4. Using HostBinding to Bind to Host Properties](#34-using-hostbinding-to-bind-to-host-properties)
     - [3.4.1. Binding to Directive Properties](#341-binding-to-directive-properties)
-  - [Creating a class toggle using HostBinding and HostListener in a custom directive](#creating-a-class-toggle-using-hostbinding-and-hostlistener-in-a-custom-directive)
+  - [3.5. Creating a class toggle using HostBinding and HostListener in a custom directive](#35-creating-a-class-toggle-using-hostbinding-and-hostlistener-in-a-custom-directive)
 - [4. Passing data to a child component](#4-passing-data-to-a-child-component)
 - [5. Passing data to a parent component](#5-passing-data-to-a-parent-component)
   - [5.1. Creating custom events](#51-creating-custom-events)
 - [6. NAVIGATION / ROUTING](#6-navigation--routing)
-- [7. IMPORTANT COMMANDS](#7-important-commands)
-  - [7.1. Creating new component](#71-creating-new-component)
-  - [7.2. Creating new directive](#72-creating-new-directive)
-  - [7.3. Adding Bootstrap](#73-adding-bootstrap)
+- [7. Services](#7-services)
+- [8. IMPORTANT COMMANDS](#8-important-commands)
+  - [8.1. Creating new component](#81-creating-new-component)
+  - [8.2. Creating new directive](#82-creating-new-directive)
+  - [8.3. Adding Bootstrap](#83-adding-bootstrap)
 
 
 
@@ -290,7 +291,7 @@ ngOnInit(){
 
 
 
-### Creating a class toggle using HostBinding and HostListener in a custom directive
+### 3.5. Creating a class toggle using HostBinding and HostListener in a custom directive
 `custom.directive.ts`
 ```ts
 export class customDirective{
@@ -502,9 +503,51 @@ ngOnInit() {
 
 
 
-## 7. IMPORTANT COMMANDS
+## 7. Services
+A service is a class that acts as a central storage that can be accessed anywhere
 
-### 7.1. Creating new component
+Creation:
+
+create a file name `fileName.service.ts` in the `app` folder or the `app/shared` folder or somewhere central
+
+`logging.service.ts`
+```ts
+export class LoggingService{
+  logStatusChange(status: string){
+    console.log('A server status has changed, new status: ' + status);
+  }
+}
+```
+
+Usage:
+
+`new-server.component.ts`
+```ts
+import { LoggingService } from '../logging.service'
+
+@Component({
+  ...
+  providers: [LoggingService], //tells the component what services will be provided
+})
+
+export class NewServerComponent{
+  constructor(private logService: LoggingService){}
+
+  onServerCreate(serverStatus: string){
+    this.logService.logStatusChange(serverStatus);
+  }
+}
+```
+*don't forget to:
+- import the service;
+- declare the provider;
+- add the data type as a constructor parameter;
+
+
+
+## 8. IMPORTANT COMMANDS
+
+### 8.1. Creating new component
 
 - ```cmd
   ng generate component 'componentName'
@@ -514,7 +557,7 @@ ngOnInit() {
   ng g c 'componentName'
   ```
 
-### 7.2. Creating new directive
+### 8.2. Creating new directive
 
 - ```cmd
   ng generate directive ´directiveName'
@@ -524,7 +567,7 @@ ngOnInit() {
   ng g d ´directiveName'
   ```
 
-### 7.3. Adding Bootstrap
+### 8.3. Adding Bootstrap
 - ```
   npm install --save bootstrap@5
   ```
