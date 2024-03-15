@@ -17,11 +17,12 @@
   - [5.1. Creating custom events](#51-creating-custom-events)
 - [6. NAVIGATION / ROUTING](#6-navigation--routing)
 - [7. Services](#7-services)
-  - [Creating a Data Service](#creating-a-data-service)
-- [8. IMPORTANT COMMANDS](#8-important-commands)
-  - [8.1. Creating new component](#81-creating-new-component)
-  - [8.2. Creating new directive](#82-creating-new-directive)
-  - [8.3. Adding Bootstrap](#83-adding-bootstrap)
+  - [7.1. Creating a Data Service](#71-creating-a-data-service)
+- [8. Deploying to Firebase](#8-deploying-to-firebase)
+- [9. IMPORTANT COMMANDS](#9-important-commands)
+  - [9.1. Creating new component](#91-creating-new-component)
+  - [9.2. Creating new directive](#92-creating-new-directive)
+  - [9.3. Adding Bootstrap](#93-adding-bootstrap)
 
 
 
@@ -549,7 +550,7 @@ export class NewServerComponent{
 - we should also add the service in the 'providers' array in `app.module.ts`;
 - when we want to use the same service/s in sibling components we can import those services in the parent component. There's no harm in it and it will propagate to children components
 
-### Creating a Data Service
+### 7.1. Creating a Data Service
 `shopping-list.service.ts`
 ```ts
 ingredientsChanged = new EventEmitter<Ingredient[]>();
@@ -575,7 +576,7 @@ export class ShoppingListComponent implements OnInit{
   ingredients = Ingredient[];
 
   constructor(private shoppingListService: ShoppingListService){}
-
+.
   ngOnInit(){
     this.ingredients = this.shoppingListService.getIngredients();
     this.shoppingListService.ingredientsChanged.subscribe((ingredients: Ingredient[]) => {
@@ -590,9 +591,26 @@ The subscribe method is linked to an EventEmitter to update whenever changes wer
 
 
 
-## 8. IMPORTANT COMMANDS
+## 8. Deploying to Firebase
+- use the command `ng build` to convert everything to JS code to be ran in the browser, this will create the folder `dist` in your root folder;
+- install firebase's CLI with `npm i -g firebase-tools`;
+- login to https://console.firebase.google.com/ and create a new project;
+- login to firebase's CLI with `firebase login`;
+- navigate to the project's directory, run the command `firebase init` and follow the next steps:
+  - "Are you ready to proceed?" `Yes`;
+  - "Which Firebase features do you want to set up for this directory? ..." `Hosting: Configure files for Firebase Hosting and (optionally) set GitHub Actions deploy`;
+  - `Use an existing option` and select the project you previously set up in firebase's web site;
+  - "What do you want to use as your public directory?" `dist/jp-practice/browser` **NOTE:** this will look for the file `index.html` in your `dist` folder, so the exact directory may vary and 'jp-practice' is the name of my folder and will be named according to your project's name;
+  - "Configure as a single-page app (rewrite all urls to /index.html)?" `Yes` this is crucial for single-page applications (Vue, Angular, etc.);
+  - "Set up automatic builds and deploys with GitHub?" `No`;
+  - "File 'dist/jp-practice/browser7index.html' already exists. Overwrite?" `No`;
+- lastly run the command `firebase deploy` and CTRL + Click the url given in "Hosting URL".
 
-### 8.1. Creating new component
+
+
+## 9. IMPORTANT COMMANDS
+
+### 9.1. Creating new component
 
 - ```cmd
   ng generate component 'componentName'
@@ -602,7 +620,7 @@ The subscribe method is linked to an EventEmitter to update whenever changes wer
   ng g c 'componentName'
   ```
 
-### 8.2. Creating new directive
+### 9.2. Creating new directive
 
 - ```cmd
   ng generate directive ´directiveName'
@@ -612,7 +630,7 @@ The subscribe method is linked to an EventEmitter to update whenever changes wer
   ng g d ´directiveName'
   ```
 
-### 8.3. Adding Bootstrap
+### 9.3. Adding Bootstrap
 - ```
   npm install --save bootstrap@5
   ```
