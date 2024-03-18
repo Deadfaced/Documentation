@@ -16,6 +16,7 @@
 - [5. Passing data to a parent component](#5-passing-data-to-a-parent-component)
   - [5.1. Creating custom events](#51-creating-custom-events)
 - [6. NAVIGATION / ROUTING](#6-navigation--routing)
+  - [6.1. Navigating programatically](#61-navigating-programatically)
 - [7. Services](#7-services)
   - [7.1. Creating a Data Service](#71-creating-a-data-service)
 - [8. Deploying to Firebase](#8-deploying-to-firebase)
@@ -520,6 +521,19 @@ ngOnInit() {
 
     // Find the product that correspond with the id provided in route.
     this.product = products.find(product => product.id === productIdFromRoute);
+}
+```
+
+### 6.1. Navigating programatically
+In case we want to navigate to a certain link after performing an action (like a method) we can navigate programatically:
+- import `Router` from `@angular/router` and call it in the constructor:
+```ts
+constructor(private router: Router) { }
+```
+- use `router.navigate` method to signal to which route you want to navigate to:
+```ts
+onLoadServer(){
+  this.router.navigate(['servers'];)
 }
 ```
 
