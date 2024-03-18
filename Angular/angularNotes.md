@@ -17,12 +17,13 @@
   - [5.1. Creating custom events](#51-creating-custom-events)
 - [6. NAVIGATION / ROUTING](#6-navigation--routing)
   - [6.1. Passing and fetching parameters](#61-passing-and-fetching-parameters)
-  - [6.2. Navigating programatically](#62-navigating-programatically)
-    - [6.2.1. Navigating programatically with relative paths](#621-navigating-programatically-with-relative-paths)
+  - [6.2. Updating parameters reactively](#62-updating-parameters-reactively)
+  - [6.3. Navigating programatically](#63-navigating-programatically)
+    - [6.3.1. Navigating programatically with relative paths](#631-navigating-programatically-with-relative-paths)
 - [7. Services](#7-services)
   - [7.1. Creating a Data Service](#71-creating-a-data-service)
 - [8. Deploying to Firebase](#8-deploying-to-firebase)
-  - [Updating a deployed site](#updating-a-deployed-site)
+  - [8.1. Updating a deployed site](#81-updating-a-deployed-site)
 - [9. IMPORTANT COMMANDS](#9-important-commands)
   - [9.1. Creating new component](#91-creating-new-component)
   - [9.2. Creating new directive](#92-creating-new-directive)
@@ -537,7 +538,25 @@ ngOnInit() {
 }
 ```
 
-### 6.2. Navigating programatically
+### 6.2. Updating parameters reactively
+
+The above code lets us receive the route parameters but only when its' directive is instantiated. To reactively update these parameters we need to use an observable.
+
+Observables are a way to deal with asyncronous operations as you can subscribe to them to be on the lookout for any changes that may occur and act reactively.
+
+For this we need to subscribe to the route's params (which are observables):
+```ts
+ngOnInit(){
+  this.route.params
+    .subscribe(
+      (params: Params) => { //'Params' needs to be imported from @angular/router
+        this.product.id = ['id'];
+      }
+    );
+}
+```
+
+### 6.3. Navigating programatically
 In case we want to navigate to a certain link after performing an action (like a method) we can navigate programatically:
 - import `Router` from `@angular/router` and call it in the constructor:
 ```ts
@@ -551,7 +570,7 @@ onLoadServer(){
 ```
 The example above is using an absolute path.
 
-#### 6.2.1. Navigating programatically with relative paths
+#### 6.3.1. Navigating programatically with relative paths
 
 To navigate to a relative path we must first remove the slash ('/') from the path on the navigate method. Then we need to tell angular that the path we are passing is a relative path to the activated route aka the route we are currently in. For that we need to import `Activated Route` from `@angular/router` and call it in the constructor:
 ```ts
@@ -666,7 +685,7 @@ The subscribe method is linked to an EventEmitter to update whenever changes wer
   - "File 'dist/jp-practice/browser/index.html' already exists. Overwrite?" `No`;
 - lastly run the command `firebase deploy` and CTRL + Click the url given in "Hosting URL".
 
-### Updating a deployed site
+### 8.1. Updating a deployed site
 After all the changes are made simply run these commands:
 - `ng build`;
 - `firebase deploy`.
