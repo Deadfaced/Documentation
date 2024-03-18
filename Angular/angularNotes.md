@@ -22,6 +22,7 @@
 - [7. Services](#7-services)
   - [7.1. Creating a Data Service](#71-creating-a-data-service)
 - [8. Deploying to Firebase](#8-deploying-to-firebase)
+  - [Updating a deployed site](#updating-a-deployed-site)
 - [9. IMPORTANT COMMANDS](#9-important-commands)
   - [9.1. Creating new component](#91-creating-new-component)
   - [9.2. Creating new directive](#92-creating-new-directive)
@@ -511,7 +512,7 @@ Routes = [
 <a *ngFor="product of products" [routerLink]="['/products'], product.id">
 ```
 
-- after that in the child component we have to import `ActivatedRoute` from `@angular/router` which will tell angular what is the current route and `OnInit` from `@angular/core` as well as define the property implementing `OnInit` interface (this requires the `ngOnInit` method):
+- after that in the child component we have to import `ActivatedRoute` from `@angular/router`, which will tell angular what is the current route, and `OnInit` from `@angular/core` as well as define the property implementing `OnInit` interface (this requires the `ngOnInit` method):
 ```ts
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -664,6 +665,11 @@ The subscribe method is linked to an EventEmitter to update whenever changes wer
   - "Set up automatic builds and deploys with GitHub?" `No`;
   - "File 'dist/jp-practice/browser7index.html' already exists. Overwrite?" `No`;
 - lastly run the command `firebase deploy` and CTRL + Click the url given in "Hosting URL".
+
+### Updating a deployed site
+After all the changes are made simply run these commands:
+- `ng build`;
+- `firebase deploy`.
 
 
 
