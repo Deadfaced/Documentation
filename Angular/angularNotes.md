@@ -330,7 +330,7 @@ export class UserComponent {
 ```ts
 import { UserComponent } from './user.component';
 ```
-  - (optional) create a property to save the data to passed on to the child component:
+  - (optional) create a property to save the data to be passed on to the child component:
 ```ts
 export class UsersComponent {
     users: User[] = [
