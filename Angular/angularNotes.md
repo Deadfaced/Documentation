@@ -128,7 +128,7 @@ Built-in directives:
 - `ngClass` - `[ngClass]="{'className': %condition%}"` example: `[ngClass]="{online: serverStatus === 'online'}"`;
 
 ### 3.1. Building a Structural Directive
-For this example I will be creating an únless' directive that will be a negation of an ngIf
+For this example I will be creating an 'unless' directive that will be a negation of an ngIf
 - create a new directive:
 
 ```cmd
@@ -663,7 +663,7 @@ The subscribe method is linked to an EventEmitter to update whenever changes wer
   - "What do you want to use as your public directory?" `dist/jp-practice/browser` **NOTE:** this will look for the file `index.html` in your `dist` folder, so the exact directory may vary and 'jp-practice' is the name of my folder and will be named according to your project's name;
   - "Configure as a single-page app (rewrite all urls to /index.html)?" `Yes` this is crucial for single-page applications (Vue, Angular, etc.);
   - "Set up automatic builds and deploys with GitHub?" `No`;
-  - "File 'dist/jp-practice/browser7index.html' already exists. Overwrite?" `No`;
+  - "File 'dist/jp-practice/browser/index.html' already exists. Overwrite?" `No`;
 - lastly run the command `firebase deploy` and CTRL + Click the url given in "Hosting URL".
 
 ### Updating a deployed site
