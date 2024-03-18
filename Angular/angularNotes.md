@@ -315,18 +315,38 @@ export class customDirective{
 
 
 ## 4. Passing data to a child component
-- open terminal and create new component with the following command: `ng generate component product-alerts`;
-- import `Input` from `@angular/core`;
-- define a property with an `@Input` decorator:
+- open terminal and create new component with the following command: `ng generate component user`;
+- in the child component:
+  - import `Input` from `@angular/core`;
+  - define a property with an `@Input` decorator:
 ```ts
-export class ProductAlertsComponent {
-    @Input() product: Product | undefined;
+export class UserComponent {
+    @Input() user: User;
 }
 ```
-- remove `standalone` and `imports` properties from child component;
-- add component's class name (`ProductAlertsComponent` in the above example) to 'declarations' in `AppModule` and import the child component:
+- add component's class name (`UserComponent` in the above example) to 'declarations' in `AppModule`;
+- in the parent component:
+  - import the child component:
 ```ts
-import { ProductAlertsComponent } from './product-alerts/product-alerts.component';
+import { UserComponent } from './user.component';
+```
+  - (optional) create a property to save the data to passed on to the child component:
+```ts
+export class UsersComponent {
+    users: User[] = [
+      {
+        id: 1,
+        name: 'John Doe'
+      },
+      ...
+    ];
+
+    firstUser: User = this.users[0];
+}
+```
+  - pass the value when calling the component in the parent's html file by passing the property defined earlier:
+```html
+  <app-user user="firstUser">
 ```
 
 
