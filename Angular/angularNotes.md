@@ -16,8 +16,9 @@
 - [5. Passing data to a parent component](#5-passing-data-to-a-parent-component)
   - [5.1. Creating custom events](#51-creating-custom-events)
 - [6. NAVIGATION / ROUTING](#6-navigation--routing)
-  - [6.1. Navigating programatically](#61-navigating-programatically)
-    - [Navigating programatically with relative paths](#navigating-programatically-with-relative-paths)
+  - [6.1. Passing and fetching parameters](#61-passing-and-fetching-parameters)
+  - [6.2. Navigating programatically](#62-navigating-programatically)
+    - [6.2.1. Navigating programatically with relative paths](#621-navigating-programatically-with-relative-paths)
 - [7. Services](#7-services)
   - [7.1. Creating a Data Service](#71-creating-a-data-service)
 - [8. Deploying to Firebase](#8-deploying-to-firebase)
@@ -458,7 +459,7 @@ imports:[
 ];
 ```
 
-- replace the parent component to have a router-outlet:
+- replace the content in the parent component to have a router-outlet:
 
 `app-parent.component.html` delete this:
 ```html
@@ -492,28 +493,38 @@ or passing a bindable property (variable):
 </a>
 ```
 
-- in child component import `ActivatedRoute` from `@angular/router` and `OnInit` from `@angular/core`
+### 6.1. Passing and fetching parameters
+- in case we want to pass parameters (such as an id for example) we first need to add the new path to our Routes array and add a variable as parameter:
+```ts
+Routes = [
+  ...
+  {
+    path: 'products/:id',
+    component: ProductComponent
+  }
+]
+```
+*the ':' means that 'id' will be a variable*
+
+- then we need to add a way to get to that route like adding a routerLink to an anchor tag:
+```html
+<a *ngFor="product of products" [routerLink]="['/products'], product.id">
+```
+
+- after that in the child component we have to import `ActivatedRoute` from `@angular/router` which will tell angular what is the current route and `OnInit` from `@angular/core` as well as define the property implementing `OnInit` interface (this requires the `ngOnInit` method):
 ```ts
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-```
-- define the property implementing `OnInit` interface (this requires the `ngOnInit` method)
-```ts
-export class ProductDetailsComponent implements OnInit {
-    product: Product | undefined;
-}
-```
-- inject `ActivatedRoute` into the constructor
-```ts
-export class ProductDetailsComponent implements OnInit {
 
-    product: Product | undefined;
+export class ProductDetailsComponent implements OnInit {
+    product: Product;
 
     constructor(private route: ActivatedRoute) { }
 
 }
 ```
-- in the child component add the `ngOnInit` method and extract the id from the route parameters and find said id in the array
+
+- for the last step we add the `ngOnInit` method and extract the id from the current route's parameters which we will then use to find said id in the array to retrieve its' content:
 ```ts
 ngOnInit() {
     // First get the product id from the current route.
@@ -525,7 +536,7 @@ ngOnInit() {
 }
 ```
 
-### 6.1. Navigating programatically
+### 6.2. Navigating programatically
 In case we want to navigate to a certain link after performing an action (like a method) we can navigate programatically:
 - import `Router` from `@angular/router` and call it in the constructor:
 ```ts
@@ -539,7 +550,7 @@ onLoadServer(){
 ```
 The example above is using an absolute path.
 
-#### Navigating programatically with relative paths
+#### 6.2.1. Navigating programatically with relative paths
 
 To navigate to a relative path we must first remove the slash ('/') from the path on the navigate method. Then we need to tell angular that the path we are passing is a relative path to the activated route aka the route we are currently in. For that we need to import `Activated Route` from `@angular/router` and call it in the constructor:
 ```ts
