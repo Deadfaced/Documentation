@@ -17,6 +17,7 @@
   - [5.1. Creating custom events](#51-creating-custom-events)
 - [6. NAVIGATION / ROUTING](#6-navigation--routing)
   - [6.1. Navigating programatically](#61-navigating-programatically)
+    - [Navigating programatically with relative paths](#navigating-programatically-with-relative-paths)
 - [7. Services](#7-services)
   - [7.1. Creating a Data Service](#71-creating-a-data-service)
 - [8. Deploying to Firebase](#8-deploying-to-firebase)
@@ -533,9 +534,22 @@ constructor(private router: Router) { }
 - use `router.navigate` method to signal to which route you want to navigate to:
 ```ts
 onLoadServer(){
-  this.router.navigate(['servers'];)
+  this.router.navigate(['/servers'];)
 }
 ```
+The example above is using an absolute path.
+
+#### Navigating programatically with relative paths
+
+To navigate to a relative path we must first remove the slash ('/') from the path on the navigate method. Then we need to tell angular that the path we are passing is a relative path to the activated route aka the route we are currently in. For that we need to import `Activated Route` from `@angular/router` and call it in the constructor:
+```ts
+constructor(private router: Router, private route: ActivatedRoute) {}
+
+onCreateServer(){
+  this.router.navigate(['newServer'], {relativeTo: this.route});
+}
+```
+This method is telling angular that we want to navigate to the path `newServer` which is relative to the current path, so the url would become something like `/servers/newServer`.
 
 
 
