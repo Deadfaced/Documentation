@@ -550,7 +550,7 @@ ngOnInit(){
   this.route.params
     .subscribe(
       (params: Params) => { //'Params' needs to be imported from @angular/router
-        this.product.id = ['id'];
+        this.product.id = params['id'];
       }
     );
 }
