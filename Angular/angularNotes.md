@@ -16,10 +16,11 @@
 - [5. Passing data to a parent component](#5-passing-data-to-a-parent-component)
   - [5.1. Creating custom events](#51-creating-custom-events)
 - [6. NAVIGATION / ROUTING](#6-navigation--routing)
-  - [6.1. Passing and fetching parameters](#61-passing-and-fetching-parameters)
-  - [6.2. Updating parameters reactively](#62-updating-parameters-reactively)
-  - [6.3. Navigating programatically](#63-navigating-programatically)
-    - [6.3.1. Navigating programatically with relative paths](#631-navigating-programatically-with-relative-paths)
+  - [6.1. Storing routes in its own file](#61-storing-routes-in-its-own-file)
+  - [6.2. Passing and fetching parameters](#62-passing-and-fetching-parameters)
+  - [6.3. Updating parameters reactively](#63-updating-parameters-reactively)
+  - [6.4. Navigating programatically](#64-navigating-programatically)
+    - [6.4.1. Navigating programatically with relative paths](#641-navigating-programatically-with-relative-paths)
 - [7. Services](#7-services)
   - [7.1. Creating a Data Service](#71-creating-a-data-service)
 - [8. Deploying to Firebase](#8-deploying-to-firebase)
@@ -536,7 +537,72 @@ or passing a bindable property (variable):
 </a>
 ```
 
-### 6.1. Passing and fetching parameters
+### 6.1. Storing routes in its own file
+
+- create an `app-routing.module.ts` file and add the array of routes there with its corresponding imports:
+```ts
+import { NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
+import { HomeComponent } from "./home/home.component";
+import { ServersComponent } from "./servers/servers.component";
+import { ServerComponent } from "./servers/server/server.component";
+import { EditServerComponent } from "./servers/edit-server/edit-server.component";
+import { UsersComponent } from "./users/users.component";
+import { UserComponent } from "./users/user/user.component";
+
+const appRoutes: Routes = [
+    {
+      path: 'home',
+      component: HomeComponent
+    },
+    {
+      path: 'servers',
+      component: ServersComponent,
+      children: 
+      [
+        {
+          path: ':id',
+          component: ServerComponent
+        },
+        {
+          path: ':id/edit',
+          component: EditServerComponent
+        },
+      ]
+    },
+    
+    {
+      path: 'users',
+      component: UsersComponent,
+      children: 
+      [
+        {
+          path: ':id',
+          component: UserComponent
+        }
+      ]
+    },
+  ]
+```
+- add `@NgModule` declarator and add imports and exports. The imports array will have the RouterModule where we will assign our array of routes and our exports array will be composed of our AppRoutingModule:
+```ts
+@NgModule({
+    imports: [RouterModule.forRoot(appRoutes)],
+    exports: [RouterModule]
+})
+```
+- lastly in `app.module.ts` we have to import this new module:
+```ts
+import { AppRoutingModule } from './app-routing.module'
+
+...
+
+imports: [
+    AppRoutingModule
+  ],
+```
+
+### 6.2. Passing and fetching parameters
 - in case we want to pass parameters (such as an id for example) we first need to add the new path to our Routes array and add a variable as parameter:
 ```ts
 Routes = [
@@ -579,7 +645,7 @@ ngOnInit() {
 }
 ```
 
-### 6.2. Updating parameters reactively
+### 6.3. Updating parameters reactively
 
 The above code lets us receive the route parameters but only when its' directive is instantiated. To reactively update these parameters we need to use an observable.
 
@@ -597,7 +663,7 @@ ngOnInit(){
 }
 ```
 
-### 6.3. Navigating programatically
+### 6.4. Navigating programatically
 In case we want to navigate to a certain link after performing an action (like a method) we can navigate programatically:
 - import `Router` from `@angular/router` and call it in the constructor:
 ```ts
@@ -611,7 +677,7 @@ onLoadServer(){
 ```
 The example above is using an absolute path.
 
-#### 6.3.1. Navigating programatically with relative paths
+#### 6.4.1. Navigating programatically with relative paths
 
 To navigate to a relative path we must first remove the slash ('/') from the path on the navigate method. Then we need to tell angular that the path we are passing is a relative path to the activated route aka the route we are currently in. For that we need to import `Activated Route` from `@angular/router` and call it in the constructor:
 ```ts
