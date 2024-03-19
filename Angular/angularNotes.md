@@ -769,6 +769,56 @@ const appRoutes: Routes = [
 providers: [AuthService, AuthGuard]
 ```
 
+<h3>**IMPORTANT**</h3>
+
+For Angular 15+ the above code doesn't work and has to be replaced by the following code snippets:
+`auth-guard.service.ts`
+```ts
+import { inject} from '@angular/core';
+import {
+  CanActivateFn,
+  CanActivateChildFn,
+  Router,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+  UrlTree,
+} from '@angular/router';
+import { AuthService } from './auth.service';
+import { Observable } from 'rxjs';
+ 
+export const canActivateGuard: CanActivateFn = (
+  route: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot
+): Observable<boolean | UrlTree> | 
+   Promise<boolean | UrlTree> | 
+   boolean | 
+   UrlTree  => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+  return authService.isAuthenticated().then((authenticated) => {
+    if (authenticated) {
+      return true;
+    } else {
+      router.navigate(['/']);
+    }
+  });
+};
+ 
+export const canActivateChildGuard: CanActivateChildFn = canActivateGuard;
+```
+
+`app-routing.module.ts`
+```ts
+{
+  path: 'servers',
+  canActivate: [canActivateGuard],
+  component: ServersComponent,
+  ...
+}
+```
+
+And also remove the previous services from the providers in `app.module.ts.
+
 
 
 ## 8. Services
