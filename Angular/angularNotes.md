@@ -21,14 +21,15 @@
   - [6.3. Updating parameters reactively](#63-updating-parameters-reactively)
   - [6.4. Navigating programatically](#64-navigating-programatically)
     - [6.4.1. Navigating programatically with relative paths](#641-navigating-programatically-with-relative-paths)
-- [7. Services](#7-services)
-  - [7.1. Creating a Data Service](#71-creating-a-data-service)
-- [8. Deploying to Firebase](#8-deploying-to-firebase)
-  - [8.1. Updating a deployed site](#81-updating-a-deployed-site)
-- [9. IMPORTANT COMMANDS](#9-important-commands)
-  - [9.1. Creating new component](#91-creating-new-component)
-  - [9.2. Creating new directive](#92-creating-new-directive)
-  - [9.3. Adding Bootstrap](#93-adding-bootstrap)
+- [7. Route Protection](#7-route-protection)
+- [8. Services](#8-services)
+  - [8.1. Creating a Data Service](#81-creating-a-data-service)
+- [9. Deploying to Firebase](#9-deploying-to-firebase)
+  - [9.1. Updating a deployed site](#91-updating-a-deployed-site)
+- [10. IMPORTANT COMMANDS](#10-important-commands)
+  - [10.1. Creating new component](#101-creating-new-component)
+  - [10.2. Creating new directive](#102-creating-new-directive)
+  - [10.3. Adding Bootstrap](#103-adding-bootstrap)
 
 
 
@@ -689,9 +690,88 @@ onCreateServer(){
 ```
 This method is telling angular that we want to navigate to the path `newServer` which is relative to the current path, so the url would become something like `/servers/newServer`.
 
+## 7. Route Protection
+
+- create a file that will serve as Guard for the routes:
+`auth-guard.service.ts`
+```ts
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+
+export class AuthGuard implements CanActivate{
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean>{
+
+  }
+}
+```
+**in this code our class implements `CanActivate` which functions similarly to `OnInit` in the sense that it needs to have a `canActivate()` method in order to work. This method takes 2 arguments, the `ActivatedRouteSnapshot` and the `RouterStateSnapshot` which are 2 arguments that Angular will gives for us to handle before the route loads. This method will either return an Observable (in case of waiting for a request's response aka asynchronous operation) or a Promise**
+
+- next we need to add a condition to this Guard for it to validate if the route can be accessed or not. For that we will be creating a fake auth service to simulate a login system:
+`auth.service.ts`
+```ts
+export class AuthService {
+  loggedIn = false;
+
+  isAuthenticated() {
+    const promise = new Promise(
+      (resolve, reject) => {
+        if(error){
+          reject();
+        } else{
+          resolve(this.loggedIn);
+        }
+      }
+    )
+    return promise;
+  }
+}
+```
+**in this auth service we define 'loggedIn' as false and create a method with a promise that will return the value of loggedIn. We could also add logic for logging in and logging out**
+
+- in out Guard we then check if the user is logged in through this auth service (don't forget to add Injectable since we are injecting a service into another):
+`auth-guard.service.ts`
+```ts
+constructor(private authService: AuthService, private router: Router){}
+
+canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean>{
+  return this.authService.isAuthenticated()
+    .then(
+      (authenticated: boolean) => {
+        if(authenticated) {
+          return true;
+        }else{
+          this.router.navigate(['/']);
+        }
+      }
+    )
+}
+```
+
+**in this code we are checking the isAuthenticated() method (which returns a promise) and after it resolves (then()) we use an arrow function to check if the promise returns true or false and act accordingly. If it doesn't return true it will redirect the user to the main page**
+
+- with our Guard created we need to define which routes will be protected by adding the `canActivate` keyword and specifying an array of Guards (these will be applied to the route and all its children):
+`app.module.ts`
+```ts
+const appRoutes: Routes = [
+  ...
+  {
+    path: 'servers',
+    canActivate: [AuthGuard]
+    component: ServersComponent
+  },
+  ...
+]
+```
+
+- lastly we need to add these newly created services to our providers in `app.module.ts`:
+```ts
+...
+providers: [AuthService, AuthGuard]
+```
 
 
-## 7. Services
+
+## 8. Services
 A service is a class that acts as a central storage that can be accessed anywhere
 
 Creation:
@@ -736,7 +816,7 @@ export class NewServerComponent{
 - we should also add the service in the 'providers' array in `app.module.ts`;
 - when we want to use the same service/s in sibling components we can import those services in the parent component. There's no harm in it and it will propagate to children components
 
-### 7.1. Creating a Data Service
+### 8.1. Creating a Data Service
 `shopping-list.service.ts`
 ```ts
 ingredientsChanged = new EventEmitter<Ingredient[]>();
@@ -777,7 +857,7 @@ The subscribe method is linked to an EventEmitter to update whenever changes wer
 
 
 
-## 8. Deploying to Firebase
+## 9. Deploying to Firebase
 - use the command `ng build` to convert everything to JS code to be ran in the browser, this will create the folder `dist` in your root folder;
 - install firebase's CLI with `npm i -g firebase-tools`;
 - login to https://console.firebase.google.com/ and create a new project;
@@ -792,16 +872,16 @@ The subscribe method is linked to an EventEmitter to update whenever changes wer
   - "File 'dist/jp-practice/browser/index.html' already exists. Overwrite?" `No`;
 - lastly run the command `firebase deploy` and CTRL + Click the url given in "Hosting URL".
 
-### 8.1. Updating a deployed site
+### 9.1. Updating a deployed site
 After all the changes are made simply run these commands:
 - `ng build`;
 - `firebase deploy`.
 
 
 
-## 9. IMPORTANT COMMANDS
+## 10. IMPORTANT COMMANDS
 
-### 9.1. Creating new component
+### 10.1. Creating new component
 
 - ```cmd
   ng generate component 'componentName'
@@ -811,7 +891,7 @@ After all the changes are made simply run these commands:
   ng g c 'componentName'
   ```
 
-### 9.2. Creating new directive
+### 10.2. Creating new directive
 
 - ```cmd
   ng generate directive ´directiveName'
@@ -821,7 +901,7 @@ After all the changes are made simply run these commands:
   ng g d ´directiveName'
   ```
 
-### 9.3. Adding Bootstrap
+### 10.3. Adding Bootstrap
 - ```
   npm install --save bootstrap@5
   ```
