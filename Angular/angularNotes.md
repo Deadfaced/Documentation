@@ -461,6 +461,47 @@ imports:[
 ];
 ```
 
+*NOTE:
+
+we can also:
+- create an array of routes;
+- define nested routes with the keyword `children`:
+```ts
+const appRoutes: Routes = [
+  {
+    path: '',
+    component: HomeComponent
+  },
+  {
+    path: 'users',
+    component: UsersComponent,
+    children: 
+    [
+      {
+        path: ':id',
+        component: UserComponent
+      },
+      {
+        path: ':id/edit',
+        component: UserEditComponent
+      }
+    ]
+  }
+]
+```
+**In case you are using nested routes you should use `<router-outlet />` instead of the child component's selector:**
+```html
+<div class="list-group">
+  <a
+    [routerLink]="['/servers', server.id]"
+    *ngFor="let server of servers">
+    {{ server.name }}
+  </a>
+</div>
+
+<router-outlet></router-outlet>
+```
+
 - replace the content in the parent component to have a router-outlet:
 
 `app-parent.component.html` delete this:
