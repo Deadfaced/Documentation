@@ -24,6 +24,7 @@
 - [7. Route Protection](#7-route-protection)
 - [8. Services](#8-services)
   - [8.1. Creating a Data Service](#81-creating-a-data-service)
+- [Responsivity (without media queries)](#responsivity-without-media-queries)
 - [9. Deploying to Firebase](#9-deploying-to-firebase)
   - [9.1. Updating a deployed site](#91-updating-a-deployed-site)
 - [10. IMPORTANT COMMANDS](#10-important-commands)
@@ -803,9 +804,10 @@ export const canActivateGuard: CanActivateFn = (
     }
   });
 };
- 
+
 export const canActivateChildGuard: CanActivateChildFn = canActivateGuard;
 ```
+<img src="/assets/canActivateFn.png"></img>
 
 `app-routing.module.ts`
 ```ts
@@ -904,6 +906,13 @@ export class ShoppingListComponent implements OnInit{
 **IMPORTANT**
 
 The subscribe method is linked to an EventEmitter to update whenever changes were made and should be called in `ngOnInit()`
+
+## Responsivity (without media queries)
+
+- first install the cdk service:
+```cmd
+npm i @angular/cdk
+```
 
 
 
