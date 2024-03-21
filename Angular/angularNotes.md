@@ -807,8 +807,7 @@ export const canActivateGuard: CanActivateFn = (
 
 export const canActivateChildGuard: CanActivateChildFn = canActivateGuard;
 ```
-<img src="/assets/canActivateFn.png"></img>
-
+![alt text](image.png)
 `app-routing.module.ts`
 ```ts
 {
