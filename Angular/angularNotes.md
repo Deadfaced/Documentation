@@ -25,6 +25,7 @@
 - [8. Services](#8-services)
   - [8.1. Creating a Data Service](#81-creating-a-data-service)
 - [Responsivity (without media queries)](#responsivity-without-media-queries)
+- [Observables](#observables)
 - [9. Deploying to Firebase](#9-deploying-to-firebase)
   - [9.1. Updating a deployed site](#91-updating-a-deployed-site)
 - [10. IMPORTANT COMMANDS](#10-important-commands)
@@ -912,6 +913,11 @@ The subscribe method is linked to an EventEmitter to update whenever changes wer
 ```cmd
 npm i @angular/cdk
 ```
+
+## Observables
+
+Observables are an interface used to handle asynchronous operations. An observable can return a a stream of values 
+
 
 
 
